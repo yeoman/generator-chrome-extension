@@ -1,0 +1,18 @@
+Description:
+    Create a chrome exrension boilerplate generator that creates everything for you. have fun.
+
+Example:
+    yeoman init chrome-extension $NAME[OPTIONAL]
+
+    This will create:
+        app/manifest.json
+        app/background.js
+        app/contentscript.js
+        app/options.html
+        app/popup.html
+        app/icon-128.png
+        app/icon-38.png
+        app/icon-19.png
+        app/icon-16.png
+        app/styles/main.css
+        app/_locales/en/messages.json
