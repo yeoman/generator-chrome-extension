@@ -1,6 +1,6 @@
 var path    = require('path');
 var util    = require('util');
-var yeoman  = require('../../../../');
+var yeoman  = require('yeoman-generator');
 
 module.exports = Generator;
 
