@@ -1,5 +1,5 @@
 Description:
-    Create a chrome exrension boilerplate generator that creates everything for you. have fun.
+    Create a chrome extension boilerplate generator that creates everything for you. have fun.
 
 Example:
     yeoman init chrome-extension $NAME[OPTIONAL]
