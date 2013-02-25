@@ -201,6 +201,19 @@ module.exports = function (grunt) {
         bower: {
             rjsConfig: 'app/scripts/main.js',
             indent: '    '
+        },
+        compress: {
+            dist: {
+                options: {
+                    archive: 'package/<%= appname %>.zip'
+                },
+                files: [{
+                    expand: true,
+                    cwd: 'dist/',
+                    src: ['**'],
+                    dest: ''
+                }]
+            }
         }
     });
 
@@ -243,7 +256,8 @@ module.exports = function (grunt) {
         'htmlmin',
         'uglify',
         'copy',
-        'usemin'
+        'usemin',
+        'compress'
     ]);
 
     grunt.registerTask('default', ['build']);

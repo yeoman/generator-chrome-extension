@@ -111,7 +111,7 @@ ChromeExtensionGenerator.prototype.askFor = function askFor( argument ) {
       return this.emit( 'error', err );
     }
 
-    this.manifest.name = props.name;
+    this.appname = this.manifest.name = props.name;
     this.manifest.description = props.description;
     this.manifest.action = ((/1|2/).test( props.action )) ? Math.floor( props.action ) : 0;
     this.manifest.options = !(/n/i).test( props.options );
@@ -193,11 +193,14 @@ ChromeExtensionGenerator.prototype.manifestFiles = function manifestFiles() {
 }
 
 ChromeExtensionGenerator.prototype.extensionFiles = function extensionFiles() {
+  var backgroundjs = 'background.js';
+
   // browser or page action files.
   if (this.manifest.action > 0) {
     this.template( 'popup.html', 'app/popup.html' );
     this.copy( 'images/icon-19.png', 'app/images/icon-19.png' );
     this.copy( 'images/icon-38.png', 'app/images/icon-38.png' );
+    this.manifest.action == 2 && ( backgroundjs = 'background.pageaction.js' );
   }
 
   // options files
@@ -211,7 +214,7 @@ ChromeExtensionGenerator.prototype.extensionFiles = function extensionFiles() {
   }
 
   // background script
-  this.template( 'scripts/background.js', 'app/scripts/background.js' );
+  this.template( 'scripts/' + backgroundjs, 'app/scripts/background.js' );
 
   // extension assets
   this.template( '_locales/en/messages.json', 'app/_locales/en/messages.json' );
