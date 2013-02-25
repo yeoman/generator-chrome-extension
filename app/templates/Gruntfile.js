@@ -28,6 +28,15 @@ module.exports = function (grunt) {
             compass: {
                 files: ['<%%= yeoman.app %>/styles/*.{scss,sass}'],
                 tasks: ['compass']
+            },
+            livereload: {
+                files: [
+                    '<%= yeoman.app %>/*.html',
+                    '{.tmp,<%= yeoman.app %>}/styles/*.css',
+                    '{.tmp,<%= yeoman.app %>}/scripts/*.js',
+                    '<%= yeoman.app %>/images/*.{png,jpg,jpeg}'
+                ],
+                tasks: ['livereload']
             }
         },
         connect: {
@@ -67,7 +76,7 @@ module.exports = function (grunt) {
         },
         open: {
             server: {
-                url: 'http://localhost:<%%= connect.options.port %>'
+                url: 'http://localhost:<%= connect.options.port %>'
             }
         },
         clean: {
@@ -134,6 +143,11 @@ module.exports = function (grunt) {
                 // chrome extension have no default files for uglify
                 files: {
                 }
+        },
+        useminPrepare: {
+            html: '<%= yeoman.app %>/index.html',
+            options: {
+                dest: '<%= yeoman.dist %>'
             }
         },
         usemin: {
@@ -208,10 +222,27 @@ module.exports = function (grunt) {
     // remove when mincss task is renamed
     grunt.renameTask('mincss', 'cssmin');
 
+    grunt.registerTask('server', function (target) {
+        if (target === 'dist') {
+            return grunt.task.run(['open', 'connect:dist:keepalive']);
+        }
+
+        grunt.task.run([
+            'clean:server',
+            'coffee:dist',
+            'compass:server',
+            'livereload-start',
+            'connect:livereload',
+            'open',
+            'watch'
+        ]);
+    });
 
     grunt.registerTask('test', [
+        'clean:server',
         'coffee',
         'compass',
+        'connect:test',
         'mocha'
     ]);
 
