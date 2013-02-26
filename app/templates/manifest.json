@@ -10,7 +10,6 @@
   "default_locale": "en",
   "background": {
    	"scripts": [
-      "components/jquery/jquery.js",
       "scripts/background.js"
     ]
   }<%= manifest.items %>
