@@ -30,6 +30,8 @@ function ChromeExtensionGenerator( args, options, config ) {
   this.on('end', function () {
     console.log('\nI\'m all done. Just run ' + 'npm install && bower install'.bold.yellow + ' to install the required dependencies.');
   });
+
+  this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
 }
 
 util.inherits( ChromeExtensionGenerator, yeoman.generators.NamedBase );
