@@ -1,9 +1,5 @@
 // Generated on <%= (new Date).toISOString().split('T')[0] %> using <%= pkg.name %> <%= pkg.version %>
 'use strict';
-var lrSnippet = require('grunt-contrib-livereload/lib/utils').livereloadSnippet;
-var mountFolder = function (connect, dir) {
-    return connect.static(require('path').resolve(dir));
-};
 
 // # Globbing
 // for performance reasons we're only matching one level down:
@@ -37,51 +33,8 @@ module.exports = function (grunt) {
                 tasks: ['compass']
             },
         },
-        connect: {
-            options: {
-                port: 9000,
-                // change this to '0.0.0.0' to access the server from outside
-                hostname: 'localhost'
-            },
-            livereload: {
-                options: {
-                    middleware: function (connect) {
-                        return [
-                            lrSnippet,
-                            mountFolder(connect, '.tmp'),
-                            mountFolder(connect, 'app')
-                        ];
-                    }
-                }
-            },
-            test: {
-                options: {
-                    middleware: function (connect) {
-                        return [
-                            mountFolder(connect, '.tmp'),
-                            mountFolder(connect, 'test')
-                        ];
-                    }
-                }
-            },
-            dist: {
-                options: {
-                    middleware: function (connect) {
-                        return [
-                            mountFolder(connect, 'dist')
-                        ];
-                    }
-                }
-            }
-        },
-        open: {
-            server: {
-                path: 'http://localhost:<%%= connect.options.port %>'
-            }
-        },
         clean: {
             dist: ['.tmp', '<%%= yeoman.dist %>/*'],
-            server: '.tmp'
         },
         jshint: {
             options: {
@@ -139,22 +92,27 @@ module.exports = function (grunt) {
                 }
             }
         },
-
-        //
-        // disabled concat and uglify task for chrome extension
-        //
-
-        // not used since Uglify task does concat,
-        // but still available if needed
-        /*concat: {
-            dist: {}
-        },*/
-        /* uglify: {
+        concat: {
             dist: {
-                files: {
-                }
+              files: {
+              }
             }
-        },*/
+        },
+        useminPrepare: {
+            html: [
+              '<%%= yeoman.app %>/popup.html',
+              '<%%= yeoman.app %>/options.html'
+            ],
+            options: {
+                dest: '<%%= yeoman.dist %>'
+            }
+        },
+        uglify: {
+            dist: {
+              files: {
+              }
+            }
+        },
         usemin: {
             html: ['<%%= yeoman.dist %>/{,*/}*.html'],
             css: ['<%%= yeoman.dist %>/styles/{,*/}*.css'],
@@ -212,7 +170,6 @@ module.exports = function (grunt) {
                     dest: '<%%= yeoman.dist %>',
                     src: [
                         '*.{ico,txt}',
-                        '{,*/}*.{js,json}',
                         '{,*/}*.{png,jpg,jpeg}',
                         '_locales/{,*/}*.json'
                     ]
@@ -241,27 +198,40 @@ module.exports = function (grunt) {
 
     grunt.renameTask('regarde', 'watch');
 
-    grunt.registerTask('server', function (target) {
-        if (target === 'dist') {
-            return grunt.task.run(['build', 'open', 'connect:dist:keepalive']);
-        }
+    grunt.registerTask('prepareManifest', function() {
+      var scripts = [];
+      var concat = grunt.config( 'concat' );
+      var uglify = grunt.config( 'uglify' );
+      var manifest = grunt.file.readJSON( yeomanConfig.app + '/manifest.json' );
+      manifest.background.scripts.forEach(function( script ) {
+        scripts.push( yeomanConfig.app + '/' + script );
+      });
 
-        grunt.task.run([
-            'clean:server',
-            'coffee:dist',
-            'compass:server',
-            'livereload-start',
-            'connect:livereload',
-            'open',
-            'watch'
-        ]);
+      concat.dist.files['<%%= yeoman.dist %>/scripts/background.js'] = scripts;
+      uglify.dist.files['<%%= yeoman.dist %>/scripts/background.js'] = '<%%= yeoman.dist %>/scripts/background.js';
+
+      manifest.content_scripts.forEach(function( contentScript, index ) {
+          if ( contentScript.js ) {
+              contentScript.js.forEach(function( script ) {
+                  uglify.dist.files[ '<%%= yeoman.dist %>/' + script ] = '<%%= yeoman.app %>/' + script;
+              });
+          }
+      });
+
+      grunt.config('concat', concat);
+      grunt.config('uglify', uglify);
+
+    });
+
+    grunt.registerTask('manifest', function() {
+      var manifest = grunt.file.readJSON( yeomanConfig.app + '/manifest.json' );
+      manifest.background.scripts = ["scripts/background.js"];
+      grunt.file.write( yeomanConfig.dist + '/manifest.json', JSON.stringify( manifest, null, 2 ) );
     });
 
     grunt.registerTask('test', [
-        'clean:server',
         'coffee',
         'compass',
-        'connect:test',
         'mocha'
     ]);
 
@@ -269,14 +239,17 @@ module.exports = function (grunt) {
         'clean:dist',
         'coffee',
         'compass:dist',
+        'prepareManifest',
+        'useminPrepare',
         'imagemin',
         'htmlmin',
-        // 'concat', // disabled concat task for chrome extension
+        'concat',
         'cssmin',
-        // 'uglify', // disabled uglify task for chrome extension
+        'uglify',
         'copy',
         'usemin',
-        'compress'
+        'compress',
+        'manifest'
     ]);
 
     grunt.registerTask('default', [

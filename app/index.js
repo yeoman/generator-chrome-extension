@@ -200,6 +200,7 @@ ChromeExtensionGenerator.prototype.extensionFiles = function extensionFiles() {
   // browser or page action files.
   if (this.manifest.action > 0) {
     this.template( 'popup.html', 'app/popup.html' );
+    this.template( 'scripts/popup.js', 'app/scripts/popup.js' );
     this.copy( 'images/icon-19.png', 'app/images/icon-19.png' );
     this.copy( 'images/icon-38.png', 'app/images/icon-38.png' );
     this.manifest.action == 2 && ( backgroundjs = 'background.pageaction.js' );
@@ -208,6 +209,7 @@ ChromeExtensionGenerator.prototype.extensionFiles = function extensionFiles() {
   // options files
   if (this.manifest.options) {
     this.template( 'options.html', 'app/options.html' );
+    this.template( 'scripts/options.js', 'app/scripts/options.js' );
   }
 
   // content script
