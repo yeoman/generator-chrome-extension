@@ -1,25 +1,42 @@
+'use strict';
 var path    = require('path');
 var util    = require('util');
 var yeoman  = require('yeoman-generator');
 
-module.exports = Generator;
+module.exports = ChromeExtensionGenerator;
 
-function Generator() {
+function ChromeExtensionGenerator( args, options, config ) {
   yeoman.generators.Base.apply( this, arguments );
-  this.sourceRoot(path.join( __dirname, 'templates'));
-  this.appname = arguments[0].length > 0 ? arguments[0] : path.basename(process.cwd());
+
+  // set source root path to templates
+  this.sourceRoot( path.join( __dirname, 'templates') );
+
+  // init extension manifest data
   this.manifest = {
     permissions:{}
   };
 
-  this.code = {
-    background: ''
-  };
+   // setup the test-framework property, Gruntfile template will need this
+  this.testFramework = options['test-framework'] || 'mocha';
+
+  // for hooks to resolve on mocha by default
+  if (!options['test-framework']) {
+    options['test-framework'] = 'mocha';
+  }
+
+  // resolved to mocha by default (could be switched to jasmine for instance)
+  this.hookFor('test-framework', { as: 'app' });
+
+  this.on('end', function () {
+    console.log('\nI\'m all done. Just run ' + 'npm install && bower install'.bold.yellow + ' to install the required dependencies.');
+  });
+
+  this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
 }
 
-util.inherits( Generator, yeoman.generators.NamedBase );
+util.inherits( ChromeExtensionGenerator, yeoman.generators.NamedBase );
 
-Generator.prototype.askFor = function askFor( argument ) {
+ChromeExtensionGenerator.prototype.askFor = function askFor( argument ) {
   var cb = this.async();
 
   var prompts = [
@@ -91,12 +108,12 @@ Generator.prototype.askFor = function askFor( argument ) {
     }
   ];
 
-  this.prompt(prompts, function( err, props ) {
-    if ( err ) {
+  this.prompt( prompts , function( err, props ) {
+    if (err) {
       return this.emit( 'error', err );
     }
 
-    this.manifest.name = props.name;
+    this.appname = this.manifest.name = props.name;
     this.manifest.description = props.description;
     this.manifest.action = ((/1|2/).test( props.action )) ? Math.floor( props.action ) : 0;
     this.manifest.options = !(/n/i).test( props.options );
@@ -112,12 +129,15 @@ Generator.prototype.askFor = function askFor( argument ) {
   }.bind( this ));
 };
 
-Generator.prototype.writeIndex = function writeIndex() {
+ChromeExtensionGenerator.prototype.manifestFiles = function manifestFiles() {
   var manifest = {};
+  var permissions = [];
+  var items = [];
 
+  // add browser / page action field
   if (this.manifest.action > 0) {
     var action = {
-      default_icon: { 19: 'icon-19.png',38: 'icon-38.png' },
+      default_icon: { 19: 'images/icon-19.png', 38: 'images/icon-38.png' },
       default_title: this.manifest.name,
       default_popup: 'popup.html'
     };
@@ -125,19 +145,22 @@ Generator.prototype.writeIndex = function writeIndex() {
     manifest[title] = JSON.stringify( action, null, 2 ).replace( /\n/g, '\n  ' );
   }
 
+  // add options page field.
   if (this.manifest.options) {
     manifest.options_page = '"options.html"';
   }
 
+  // add omnibox keyword field.
   if (this.manifest.omnibox) {
-    manifest.omnibox = JSON.stringify( { keyword: this.manifest.omnibox }, null, 2 ).replace( /\n/g, '\n  ' );
+    manifest.omnibox = JSON.stringify({ keyword: this.manifest.omnibox }, null, 2 ).replace( /\n/g, '\n  ' );
   }
 
+  // add contentscript field.
   if (this.manifest.contentscript) {
     var contentscript = [{
       matches: ['http://*/*', 'https://*/*'],
       css: ['styles/main.css'],
-      js: ['contentscript.js'],
+      js: ['scripts/contentscript.js'],
       run_at: 'document_end',
       all_frames: false
     }];
@@ -145,15 +168,14 @@ Generator.prototype.writeIndex = function writeIndex() {
     manifest.content_scripts = JSON.stringify( contentscript, null, 2 ).replace( /\n/g, '\n  ' );
   }
 
-  var permissions = [];
+  // add generate permission field.
   for (var p in this.manifest.permissions) {
     if (this.manifest.permissions[p]) {
       permissions.push( p );
     }
   }
 
-  // if user want to declare tabs permission?
-  // append urls that defined by match pattern
+  // add generic match pattern field.
   if (this.manifest.permissions.tabs) {
     permissions.push( 'http://*/*' );
     permissions.push( 'https://*/*' );
@@ -163,45 +185,56 @@ Generator.prototype.writeIndex = function writeIndex() {
     manifest.permissions = JSON.stringify( permissions, null, 2 ).replace( /\n/g, '\n  ' );
   }
 
-  var items = [];
   for (var i in manifest) {
     items.push(['  "', i, '": ', manifest[i]].join( '' ));
   }
 
   this.manifest.items = (items.length > 0) ? ',\n' + items.join( ',\n' ) : '';
-};
 
-Generator.prototype.writeFiles = function createManifest() {
+  this.template( 'manifest.json', 'app/manifest.json' );
+}
+
+ChromeExtensionGenerator.prototype.extensionFiles = function extensionFiles() {
+  var backgroundjs = 'background.js';
+
   // browser or page action files.
   if (this.manifest.action > 0) {
-    this.template( 'app/popup.html', path.join( 'app', 'popup.html' ));
-    this.copy( 'app/icon-19.png', path.join( 'app', 'icon-19.png' ));
-    this.copy( 'app/icon-38.png', path.join( 'app', 'icon-38.png' ));
+    this.template( 'popup.html', 'app/popup.html' );
+    this.template( 'scripts/popup.js', 'app/scripts/popup.js' );
+    this.copy( 'images/icon-19.png', 'app/images/icon-19.png' );
+    this.copy( 'images/icon-38.png', 'app/images/icon-38.png' );
+    this.manifest.action == 2 && ( backgroundjs = 'background.pageaction.js' );
   }
 
   // options files
   if (this.manifest.options) {
-    this.template( 'app/options.html', path.join( 'app', 'options.html' ));
+    this.template( 'options.html', 'app/options.html' );
+    this.template( 'scripts/options.js', 'app/scripts/options.js' );
   }
 
   // content script
   if (this.manifest.contentscript) {
-    this.template( 'app/contentscript.js', path.join( 'app', 'contentscript.js' ));
+    this.template( 'scripts/contentscript.js', 'app/scripts/contentscript.js' );
   }
 
-  // project files
-  this.directory( 'test', 'test' );
-  this.copy( '.editorconfig', '.editorconfig' );
-  this.copy( '.gitignore', '.gitignore' );
-  this.copy( '.gitattributes', '.gitattributes' );
-  this.copy( '.jshintrc', '.jshintrc' );
-  this.copy( 'Gruntfile.js', 'Gruntfile.js' );
+  // background script
+  this.template( 'scripts/' + backgroundjs, 'app/scripts/background.js' );
 
-  // extension default files
-  this.copy( 'app/styles/main.css', path.join( 'app', 'styles', 'main.css' ));
-  this.copy( 'app/icon-16.png', path.join( 'app', 'icon-16.png' ));
-  this.copy( 'app/icon-128.png', path.join( 'app', 'icon-128.png' ));
-  this.template( 'app/background.js', path.join( 'app', 'background.js' ));
-  this.template( 'app/_locales/en/messages.json', path.join( 'app', '_locales', 'en' , 'messages.json' ));
-  this.template( 'app/manifest.json', path.join( 'app', 'manifest.json' ));
+  // extension assets
+  this.template( '_locales/en/messages.json', 'app/_locales/en/messages.json' );
+  this.copy( 'styles/main.css', 'app/styles/main.css' );
+  this.copy( 'images/icon-16.png', 'app/images/icon-16.png' );
+  this.copy( 'images/icon-128.png', 'app/images/icon-128.png' );
+}
+
+
+ChromeExtensionGenerator.prototype.packageFiles = function packageFiles() {
+  this.copy( 'package.json', 'package.json' );
+  this.copy( 'component.json', 'component.json' );
+  this.copy( 'bowerrc', '.bowerrc' );
+  this.copy( 'editorconfig', '.editorconfig' );
+  this.copy( 'gitignore', '.gitignore' );
+  this.copy( 'gitattributes', '.gitattributes' );
+  this.copy( 'jshintrc', '.jshintrc' );
+  this.template( 'Gruntfile.js' );
 };
