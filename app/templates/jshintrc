@@ -20,6 +20,6 @@
     "trailing": true,
     "smarttabs": true,
     "globals" : {
-      "chrome": true
+        "chrome": true
     }
 }
