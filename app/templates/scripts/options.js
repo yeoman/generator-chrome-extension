@@ -1,3 +1,1 @@
-// CHROME EXTENSION OPTIONS.JS
-
 'use strict';
