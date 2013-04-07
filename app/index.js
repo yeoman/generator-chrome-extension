@@ -3,7 +3,7 @@ var path    = require('path');
 var util    = require('util');
 var yeoman  = require('yeoman-generator');
 
-var ChromeExtensionGenerator = module.exports = function ChromeExtensionGenerator (args, options, config) {
+var ChromeExtensionGenerator = module.exports = function ChromeExtensionGenerator(args, options, config) {
   yeoman.generators.Base.apply(this, arguments);
 
   // set source root path to templates
@@ -34,7 +34,7 @@ var ChromeExtensionGenerator = module.exports = function ChromeExtensionGenerato
 
 util.inherits(ChromeExtensionGenerator, yeoman.generators.NamedBase);
 
-ChromeExtensionGenerator.prototype.askFor = function askFor (argument) {
+ChromeExtensionGenerator.prototype.askFor = function askFor(argument) {
   var cb = this.async();
 
   var prompts = [
@@ -127,7 +127,7 @@ ChromeExtensionGenerator.prototype.askFor = function askFor (argument) {
   }.bind(this));
 };
 
-ChromeExtensionGenerator.prototype.manifestFiles = function manifestFiles () {
+ChromeExtensionGenerator.prototype.manifestFiles = function manifestFiles() {
   var manifest = {};
   var permissions = [];
   var items = [];
@@ -192,7 +192,7 @@ ChromeExtensionGenerator.prototype.manifestFiles = function manifestFiles () {
   this.template('manifest.json', 'app/manifest.json');
 };
 
-ChromeExtensionGenerator.prototype.extensionFiles = function extensionFiles () {
+ChromeExtensionGenerator.prototype.extensionFiles = function extensionFiles() {
   var backgroundjs = 'background.js';
 
   // browser or page action files.
@@ -228,7 +228,7 @@ ChromeExtensionGenerator.prototype.extensionFiles = function extensionFiles () {
 };
 
 
-ChromeExtensionGenerator.prototype.packageFiles = function packageFiles () {
+ChromeExtensionGenerator.prototype.packageFiles = function packageFiles() {
   this.copy('package.json', 'package.json');
   this.copy('component.json', 'component.json');
   this.copy('bowerrc', '.bowerrc');
