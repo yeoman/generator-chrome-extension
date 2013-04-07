@@ -3,9 +3,7 @@ var path    = require('path');
 var util    = require('util');
 var yeoman  = require('yeoman-generator');
 
-module.exports = ChromeExtensionGenerator;
-
-function ChromeExtensionGenerator( args, options, config ) {
+var ChromeExtensionGenerator = module.exports = function ChromeExtensionGenerator (args, options, config) {
   yeoman.generators.Base.apply( this, arguments );
 
   // set source root path to templates
@@ -32,7 +30,7 @@ function ChromeExtensionGenerator( args, options, config ) {
   });
 
   this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
-}
+};
 
 util.inherits( ChromeExtensionGenerator, yeoman.generators.NamedBase );
 
@@ -192,7 +190,7 @@ ChromeExtensionGenerator.prototype.manifestFiles = function manifestFiles() {
   this.manifest.items = (items.length > 0) ? ',\n' + items.join( ',\n' ) : '';
 
   this.template( 'manifest.json', 'app/manifest.json' );
-}
+};
 
 ChromeExtensionGenerator.prototype.extensionFiles = function extensionFiles() {
   var backgroundjs = 'background.js';
@@ -203,7 +201,9 @@ ChromeExtensionGenerator.prototype.extensionFiles = function extensionFiles() {
     this.template( 'scripts/popup.js', 'app/scripts/popup.js' );
     this.copy( 'images/icon-19.png', 'app/images/icon-19.png' );
     this.copy( 'images/icon-38.png', 'app/images/icon-38.png' );
-    this.manifest.action == 2 && ( backgroundjs = 'background.pageaction.js' );
+    if (this.manifest.action === 2) {
+      backgroundjs = 'background.pageaction.js';
+    }
   }
 
   // options files
@@ -225,7 +225,7 @@ ChromeExtensionGenerator.prototype.extensionFiles = function extensionFiles() {
   this.copy( 'styles/main.css', 'app/styles/main.css' );
   this.copy( 'images/icon-16.png', 'app/images/icon-16.png' );
   this.copy( 'images/icon-128.png', 'app/images/icon-128.png' );
-}
+};
 
 
 ChromeExtensionGenerator.prototype.packageFiles = function packageFiles() {
