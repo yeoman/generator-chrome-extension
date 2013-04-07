@@ -94,14 +94,14 @@ module.exports = function (grunt) {
         },
         concat: {
             dist: {
-              files: {
-              }
+                files: {
+                }
             }
         },
         useminPrepare: {
             html: [
-              '<%%= yeoman.app %>/popup.html',
-              '<%%= yeoman.app %>/options.html'
+                '<%%= yeoman.app %>/popup.html',
+                '<%%= yeoman.app %>/options.html'
             ],
             options: {
                 dest: '<%%= yeoman.dist %>'
@@ -109,8 +109,8 @@ module.exports = function (grunt) {
         },
         uglify: {
             dist: {
-              files: {
-              }
+                files: {
+                }
             }
         },
         usemin: {
