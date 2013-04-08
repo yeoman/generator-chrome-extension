@@ -1,5 +1,9 @@
+/*jshint camelcase: false*/
 // Generated on <%= (new Date).toISOString().split('T')[0] %> using <%= pkg.name %> <%= pkg.version %>
 'use strict';
+var mountFolder = function (connect, dir) {
+    return connect.static(require('path').resolve(dir));
+};
 
 // # Globbing
 // for performance reasons we're only matching one level down:
@@ -32,6 +36,23 @@ module.exports = function (grunt) {
                 files: ['<%%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
                 tasks: ['compass']
             },
+        },
+        connect: {
+            options: {
+                port: 9000,
+                // change this to '0.0.0.0' to access the server from outside
+                hostname: 'localhost'
+            },
+            test: {
+                options: {
+                    middleware: function (connect) {
+                        return [
+                            mountFolder(connect, '.tmp'),
+                            mountFolder(connect, 'test')
+                        ];
+                    }
+                }
+            }
         },
         clean: {
             dist: ['.tmp', '<%%= yeoman.dist %>/*'],
@@ -199,39 +220,39 @@ module.exports = function (grunt) {
     grunt.renameTask('regarde', 'watch');
 
     grunt.registerTask('prepareManifest', function() {
-      var scripts = [];
-      var concat = grunt.config( 'concat' );
-      var uglify = grunt.config( 'uglify' );
-      var manifest = grunt.file.readJSON( yeomanConfig.app + '/manifest.json' );
-      manifest.background.scripts.forEach(function( script ) {
-        scripts.push( yeomanConfig.app + '/' + script );
-      });
+        var scripts = [];
+        var concat = grunt.config('concat');
+        var uglify = grunt.config('uglify');
+        var manifest = grunt.file.readJSON( yeomanConfig.app + '/manifest.json' );
+        manifest.background.scripts.forEach(function (script) {
+            scripts.push( yeomanConfig.app + '/' + script );
+        });
 
-      concat.dist.files['<%%= yeoman.dist %>/scripts/background.js'] = scripts;
-      uglify.dist.files['<%%= yeoman.dist %>/scripts/background.js'] = '<%%= yeoman.dist %>/scripts/background.js';
+        concat.dist.files['<%%= yeoman.dist %>/scripts/background.js'] = scripts;
+        uglify.dist.files['<%%= yeoman.dist %>/scripts/background.js'] = '<%%= yeoman.dist %>/scripts/background.js';
 
-      manifest.content_scripts.forEach(function( contentScript, index ) {
-          if ( contentScript.js ) {
-              contentScript.js.forEach(function( script ) {
-                  uglify.dist.files[ '<%%= yeoman.dist %>/' + script ] = '<%%= yeoman.app %>/' + script;
-              });
-          }
-      });
+        manifest.content_scripts.forEach(function(contentScript) {
+            if (contentScript.js) {
+                contentScript.js.forEach(function(script) {
+                    uglify.dist.files['<%%= yeoman.dist %>/' + script] = '<%%= yeoman.app %>/' + script;
+                });
+            }
+        });
 
-      grunt.config('concat', concat);
-      grunt.config('uglify', uglify);
-
+        grunt.config('concat', concat);
+        grunt.config('uglify', uglify);
     });
 
     grunt.registerTask('manifest', function() {
-      var manifest = grunt.file.readJSON( yeomanConfig.app + '/manifest.json' );
-      manifest.background.scripts = ["scripts/background.js"];
-      grunt.file.write( yeomanConfig.dist + '/manifest.json', JSON.stringify( manifest, null, 2 ) );
+        var manifest = grunt.file.readJSON(yeomanConfig.app + '/manifest.json');
+        manifest.background.scripts = ['scripts/background.js'];
+        grunt.file.write(yeomanConfig.dist + '/manifest.json', JSON.stringify(manifest, null, 2));
     });
 
     grunt.registerTask('test', [
         'coffee',
         'compass',
+        'connect:test',
         'mocha'
     ]);
 
