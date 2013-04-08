@@ -1,7 +1,8 @@
 'use strict';
-var path    = require('path');
-var util    = require('util');
-var yeoman  = require('yeoman-generator');
+var path = require('path');
+var util = require('util');
+var spawn = require('child_process').spawn;
+var yeoman = require('yeoman-generator');
 
 var ChromeExtensionGenerator = module.exports = function ChromeExtensionGenerator(args, options, config) {
   yeoman.generators.Base.apply(this, arguments);
@@ -26,7 +27,9 @@ var ChromeExtensionGenerator = module.exports = function ChromeExtensionGenerato
   this.hookFor('test-framework', { as: 'app' });
 
   this.on('end', function () {
-    console.log('\nI\'m all done. Just run ' + 'npm install && bower install'.bold.yellow + ' to install the required dependencies.');
+    console.log('\n\nI\'m all done. Running ' + 'npm install & bower install'.bold.yellow + ' for you to install the required dependencies. If this fails, try running the command yourself.\n\n');
+    spawn('npm', ['install'], { stdio: 'inherit' });
+    spawn('bower', ['install'], { stdio: 'inherit' });
   });
 
   this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
