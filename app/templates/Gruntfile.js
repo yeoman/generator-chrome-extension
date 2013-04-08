@@ -34,7 +34,7 @@ module.exports = function (grunt) {
             },
             compass: {
                 files: ['<%%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
-                tasks: ['compass']
+                tasks: ['compass:server']
             },
         },
         connect: {
@@ -55,7 +55,17 @@ module.exports = function (grunt) {
             }
         },
         clean: {
-            dist: ['.tmp', '<%%= yeoman.dist %>/*'],
+            dist: {
+                files: [{
+                    dot: true,
+                    src: [
+                        '.tmp',
+                        '<%%= yeoman.dist %>/*',
+                        '!<%%= yeoman.dist %>/.git*'
+                    ]
+                }]
+            },
+            server: '.tmp'
         },
         jshint: {
             options: {
@@ -78,11 +88,9 @@ module.exports = function (grunt) {
         coffee: {
             dist: {
                 files: [{
-                    // rather than compiling multiple files here you should
-                    // require them into your main .coffee file
                     expand: true,
                     cwd: '<%%= yeoman.app %>/scripts',
-                    src: '*.coffee',
+                    src: '{,*/}*.coffee',
                     dest: '.tmp/scripts',
                     ext: '.js'
                 }]
@@ -90,9 +98,10 @@ module.exports = function (grunt) {
             test: {
                 files: [{
                     expand: true,
-                    cwd: '.tmp/spec',
-                    src: '*.coffee',
-                    dest: 'test/spec'
+                    cwd: 'test/spec',
+                    src: '{,*/}*.coffee',
+                    dest: '.tmp/spec',
+                    ext: '.js'
                 }]
             }
         },
@@ -113,12 +122,17 @@ module.exports = function (grunt) {
                 }
             }
         },
-        concat: {
-            dist: {
-                files: {
-                }
-            }
-        },
+        // not used since Uglify task does concat,
+        // but still available if needed
+        /*concat: {
+            dist: {}
+        },*/
+        // not enabled since usemin task does concat and uglify
+        // check index.html to edit your build targets
+        // enable this task if you prefer defining your build targets here
+        /*uglify: {
+            dist: {}
+        },*/
         useminPrepare: {
             html: [
                 '<%%= yeoman.app %>/popup.html',
@@ -126,12 +140,6 @@ module.exports = function (grunt) {
             ],
             options: {
                 dest: '<%%= yeoman.dist %>'
-            }
-        },
-        uglify: {
-            dist: {
-                files: {
-                }
             }
         },
         usemin: {
@@ -147,6 +155,16 @@ module.exports = function (grunt) {
                     expand: true,
                     cwd: '<%%= yeoman.app %>/images',
                     src: '{,*/}*.{png,jpg,jpeg}',
+                    dest: '<%%= yeoman.dist %>/images'
+                }]
+            }
+        },
+        svgmin: {
+            dist: {
+                files: [{
+                    expand: true,
+                    cwd: '<%%= yeoman.app %>/images',
+                    src: '{,*/}*.svg',
                     dest: '<%%= yeoman.dist %>/images'
                 }]
             }
@@ -182,6 +200,7 @@ module.exports = function (grunt) {
                 }]
             }
         },
+        // Put files not handled in other tasks here
         copy: {
             dist: {
                 files: [{
@@ -197,10 +216,23 @@ module.exports = function (grunt) {
                 }]
             }
         },
-        bower: {
-            all: {
-                rjsConfig: '<%%= yeoman.app %>/scripts/main.js'
-            }
+        concurrent: {
+            server: [
+                'coffee:dist',
+                'compass:server'
+            ],
+            test: [
+                'coffee',
+                'compass'
+            ],
+            dist: [
+                'coffee',
+                'compass:dist',
+                'imagemin',
+                'svgmin',
+                'htmlmin',
+                'cssmin'
+            ]
         },
         compress: {
             dist: {
@@ -221,23 +253,27 @@ module.exports = function (grunt) {
 
     grunt.registerTask('prepareManifest', function() {
         var scripts = [];
-        var concat = grunt.config('concat');
-        var uglify = grunt.config('uglify');
-        var manifest = grunt.file.readJSON( yeomanConfig.app + '/manifest.json' );
-        manifest.background.scripts.forEach(function (script) {
-            scripts.push( yeomanConfig.app + '/' + script );
-        });
+        var concat = grunt.config('concat') || {dist:{files:{}}};
+        var uglify = grunt.config('uglify') || {dist:{files:{}}};
+        var manifest = grunt.file.readJSON(yeomanConfig.app + '/manifest.json');
 
-        concat.dist.files['<%%= yeoman.dist %>/scripts/background.js'] = scripts;
-        uglify.dist.files['<%%= yeoman.dist %>/scripts/background.js'] = '<%%= yeoman.dist %>/scripts/background.js';
+        if (manifest.background.scripts) {
+            manifest.background.scripts.forEach(function (script) {
+                scripts.push(yeomanConfig.app + '/' + script);
+            });
+            concat.dist.files['<%%= yeoman.dist %>/scripts/background.js'] = scripts;
+            uglify.dist.files['<%%= yeoman.dist %>/scripts/background.js'] = '<%%= yeoman.dist %>/scripts/background.js';
+        }
 
-        manifest.content_scripts.forEach(function(contentScript) {
-            if (contentScript.js) {
-                contentScript.js.forEach(function(script) {
-                    uglify.dist.files['<%%= yeoman.dist %>/' + script] = '<%%= yeoman.app %>/' + script;
-                });
-            }
-        });
+        if (manifest.content_scripts) {
+            manifest.content_scripts.forEach(function(contentScript) {
+                if (contentScript.js) {
+                    contentScript.js.forEach(function(script) {
+                        uglify.dist.files['<%%= yeoman.dist %>/' + script] = '<%%= yeoman.app %>/' + script;
+                    });
+                }
+            });
+        }
 
         grunt.config('concat', concat);
         grunt.config('uglify', uglify);
@@ -250,22 +286,18 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('test', [
-        'coffee',
-        'compass',
+        'clean:server',
+        'concurrent:test',
         'connect:test',
         'mocha'
     ]);
 
     grunt.registerTask('build', [
         'clean:dist',
-        'coffee',
-        'compass:dist',
         'prepareManifest',
         'useminPrepare',
-        'imagemin',
-        'htmlmin',
+        'concurrent:dist',
         'concat',
-        'cssmin',
         'uglify',
         'copy',
         'usemin',

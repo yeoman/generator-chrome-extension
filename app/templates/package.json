@@ -15,13 +15,15 @@
     "grunt-contrib-clean": "~0.4.0",
     "grunt-contrib-htmlmin": "~0.1.3",
     "grunt-contrib-imagemin": "~0.1.3",
+    "grunt-contrib-compress": "~0.4.7",
     "grunt-bower-requirejs": "~0.4.1",
     "grunt-usemin": "~0.1.10",
     "grunt-regarde": "~0.1.1",
     "grunt-mocha": "~0.3.0",
     "grunt-open": "~0.2.0",
-    "matchdep": "~0.1.1",
-    "grunt-contrib-compress": "~0.4.7"
+    "grunt-svgmin": "~0.1.0",
+    "grunt-concurrent": "~0.1.0",
+    "matchdep": "~0.1.1"
   },
   "engines": {
     "node": ">=0.8.0"
