@@ -27,9 +27,13 @@ var ChromeExtensionGenerator = module.exports = function ChromeExtensionGenerato
   this.hookFor('test-framework', { as: 'app' });
 
   this.on('end', function () {
-    console.log('\n\nI\'m all done. Running ' + 'npm install & bower install'.bold.yellow + ' for you to install the required dependencies. If this fails, try running the command yourself.\n\n');
-    spawn('npm', ['install'], { stdio: 'inherit' });
-    spawn('bower', ['install'], { stdio: 'inherit' });
+    if (options['skip-install']) {
+      console.log('\n\nI\'m all done. Just run ' + 'npm install & bower install --dev'.bold.yellow + ' to install the required dependencies.\n\n');
+    } else {
+      console.log('\n\nI\'m all done. Running ' + 'npm install & bower install'.bold.yellow + ' for you to install the required dependencies. If this fails, try running the command yourself.\n\n');
+      spawn('npm', ['install'], { stdio: 'inherit' });
+      spawn('bower', ['install'], { stdio: 'inherit' });
+    }
   });
 
   this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
