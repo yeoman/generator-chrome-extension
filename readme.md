@@ -21,6 +21,12 @@ Run `yo chrome-extension`, optionally passing an extension name:
 ```
 yo chrome-extension [extension-name]
 ```
+## Options
+
+* `--skip-install`
+
+  Skips the automatic execution of `bower` and `npm` after
+  scaffolding has finished.
 
 ## Generator
 Chrome Extension generator that creates everything you need to get started with extension development. You can choose Browser UI(Browser,Page Action, Omnibox) type and select into permissions what you need.
