@@ -8,7 +8,7 @@ var mountFolder = function (connect, dir) {
 // # Globbing
 // for performance reasons we're only matching one level down:
 // 'test/spec/{,*/}*.js'
-// use this if you want to match all subfolders:
+// use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 
 module.exports = function (grunt) {
@@ -76,7 +76,7 @@ module.exports = function (grunt) {
                 '<%%= yeoman.app %>/scripts/{,*/}*.js',
                 'test/spec/{,*/}*.js'
             ]
-        },
+        }, <% if (testFramework === 'mocha') { %>
         mocha: {
             all: {
                 options: {
@@ -85,6 +85,14 @@ module.exports = function (grunt) {
                 }
             }
         },
+        },<% } else if (testFramework === 'jasmine') { %>
+        jasmine: {
+            all: {
+                options: {
+                    specs: 'test/spec/{,*/}*.js'
+                }
+            }
+        },<% } %>
         coffee: {
             dist: {
                 files: [{
@@ -109,11 +117,14 @@ module.exports = function (grunt) {
             options: {
                 sassDir: '<%%= yeoman.app %>/styles',
                 cssDir: '.tmp/styles',
+                generatedImagesDir: '.tmp/images/generated',
                 imagesDir: '<%%= yeoman.app %>/images',
                 javascriptsDir: '<%%= yeoman.app %>/scripts',
                 fontsDir: '<%%= yeoman.app %>/styles/fonts',
-                importPath: 'app/components',
-                relativeAssets: true
+                importPath: '<%%= yeoman.app %>/bower_components',
+                httpImagesPath: '/images',
+                httpGeneratedImagesPath: '/images/generated',
+                relativeAssets: false
             },
             dist: {},
             server: {
@@ -134,20 +145,20 @@ module.exports = function (grunt) {
             dist: {}
         },*/
         useminPrepare: {
+            options: {
+                dest: '<%%= yeoman.dist %>'
+            },
             html: [
                 '<%%= yeoman.app %>/popup.html',
                 '<%%= yeoman.app %>/options.html'
-            ],
-            options: {
-                dest: '<%%= yeoman.dist %>'
-            }
+            ]
         },
         usemin: {
-            html: ['<%%= yeoman.dist %>/{,*/}*.html'],
-            css: ['<%%= yeoman.dist %>/styles/{,*/}*.css'],
             options: {
                 dirs: ['<%%= yeoman.dist %>']
-            }
+            },
+            html: ['<%%= yeoman.dist %>/{,*/}*.html'],
+            css: ['<%%= yeoman.dist %>/styles/{,*/}*.css']
         },
         imagemin: {
             dist: {
@@ -213,6 +224,13 @@ module.exports = function (grunt) {
                         'images/{,*/}*.{webp,gif}',
                         '_locales/{,*/}*.json'
                     ]
+                }, {
+                    expand: true,
+                    cwd: '.tmp/images',
+                    dest: '<%%= yeoman.dist %>/images',
+                    src: [
+                        'generated/*'
+                    ]
                 }]
             }
         },
@@ -259,13 +277,12 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.renameTask('regarde', 'watch');
-
     grunt.registerTask('test', [
         'clean:server',
         'concurrent:test',
-        'connect:test',
-        'mocha'
+        'connect:test',<% if (testFramework === 'mocha') { %>
+        'mocha'<% } else if (testFramework === 'jasmine') { %>
+        'jasmine'<% } %>
     ]);
 
     grunt.registerTask('build', [

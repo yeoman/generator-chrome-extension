@@ -2,31 +2,23 @@
 
 Maintainer: [Jimmy Moon](https://github.com/ragingwind)
 
-## Usage
+## Getting Started
+- First make a new directory, and `cd` into it: mkdir my-new-chrome-extension && cd $_
+- Make sure you have [yo](https://github.com/yeoman/yo) installed: `npm install -g yo`
+- Install the generator: `npm install -g generator-chrome-extension`
+- Run: `yo chrome-extension`, optionally passing an extension name: yo chrome-extension [extension-name]
 
-First make a new directory, and `cd` into it:
-
-```
-mkdir my-new-chrome-extension && cd $_
-```
-
-Then install `generator-chrome-extension`:
-
-```
-npm install -g generator-chrome-extension
-```
-
-Run `yo chrome-extension`, optionally passing an extension name:
-
-```
-yo chrome-extension [extension-name]
-```
 ## Options
 
 * `--skip-install`
 
   Skips the automatic execution of `bower` and `npm` after
   scaffolding has finished.
+
+* `--test-framework=[framework]`
+
+  Defaults to `mocha`. Can be switched for
+  another supported testing framework like `jasmine`.
 
 ## Generator
 Chrome Extension generator that creates everything you need to get started with extension development. You can choose Browser UI(Browser,Page Action, Omnibox) type and select into permissions what you need.

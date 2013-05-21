@@ -60,7 +60,7 @@ ChromeExtensionGenerator.prototype.askFor = function askFor(argument) {
     {
       name: 'options',
       message: 'Would you like to use the Options Page?',
-      default: 'y/N',
+      default: false,
       warning: 'You can change the option'
     },
     {
@@ -72,37 +72,37 @@ ChromeExtensionGenerator.prototype.askFor = function askFor(argument) {
     {
       name: 'contentscript',
       message: 'Would you like to use the Content Scripts (Not Programmatic)?',
-      default: 'y/N',
+      default: false,
       warning: 'You can change the option'
     },
     {
       name: 'tabs',
       message: 'Would you like to declare the "Tabs" permission?',
-      default: 'y/N',
+      default: false,
       warning: 'You can change the keyword'
     },
     {
       name: 'bookmark',
       message: 'Would you like to declare the "Bookmarks" permission?',
-      default: 'y/N',
+      default: false,
       warning: 'You can change the option'
     },
     {
       name: 'cookie',
       message: 'Would you like to declare the "Cookies" permission?',
-      default: 'y/N',
+      default: false,
       warning: 'You can change the option'
     },
     {
       name: 'history',
       message: 'Would you like to declare the "History" permission?',
-      default: 'y/N',
+      default: false,
       warning: 'You can change the option'
     },
     {
       name: 'management',
       message: 'Would you like to declare the "Management" permission?',
-      default: 'y/N',
+      default: false,
       warning: 'You can change the option'
     }
   ];
@@ -115,14 +115,14 @@ ChromeExtensionGenerator.prototype.askFor = function askFor(argument) {
     this.appname = this.manifest.name = props.name;
     this.manifest.description = props.description;
     this.manifest.action = ((/1|2/).test(props.action)) ? Math.floor(props.action) : 0;
-    this.manifest.options = !(/n/i).test(props.options);
+    this.manifest.options = props.options;
     this.manifest.omnibox = props.omnibox;
-    this.manifest.contentscript = !(/n/i).test(props.contentscript);
-    this.manifest.permissions.tabs = !(/n/i).test(props.tabs);
-    this.manifest.permissions.bookmarks = !(/n/i).test(props.bookmark);
-    this.manifest.permissions.cookies = !(/n/i).test(props.cookie);
-    this.manifest.permissions.history = !(/n/i).test(props.history);
-    this.manifest.permissions.management = !(/n/i).test(props.management);
+    this.manifest.contentscript = props.contentscript;
+    this.manifest.permissions.tabs = props.tabs;
+    this.manifest.permissions.bookmarks = props.bookmark;
+    this.manifest.permissions.cookies = props.cookie;
+    this.manifest.permissions.history = props.history;
+    this.manifest.permissions.management = props.management;
 
     cb();
   }.bind(this));
@@ -230,8 +230,8 @@ ChromeExtensionGenerator.prototype.extensionFiles = function extensionFiles() {
 
 
 ChromeExtensionGenerator.prototype.packageFiles = function packageFiles() {
-  this.copy('package.json', 'package.json');
-  this.copy('component.json', 'component.json');
+  this.copy('_package.json', 'package.json');
+  this.copy('_bower.json', 'bower.json');
   this.copy('bowerrc', '.bowerrc');
   this.copy('editorconfig', '.editorconfig');
   this.copy('gitignore', '.gitignore');

@@ -29,7 +29,7 @@ describe('Chrome Extension generator test', function () {
 
   it('creates expected files in no UI Action', function (done) {
     var expected = [
-      ['component.json', /"name": "temp"/],
+      ['bower.json', /"name": "temp"/],
       ['package.json', /"name": "temp"/],
       'Gruntfile.js',
       'app/manifest.json',
@@ -52,7 +52,7 @@ describe('Chrome Extension generator test', function () {
 
   it('creates expected files in Browser Action', function (done) {
     var expected = [
-      ['component.json', /"name": "temp"/],
+      ['bower.json', /"name": "temp"/],
       ['package.json', /"name": "temp"/],
       'Gruntfile.js',
       ['app/manifest.json', /"browser_action": {\s+"default_icon": {\s+"19": "images\/icon-19.png",\s+"38": "images\/icon-38.png"\s+},\s+"default_title": "temp",\s+"default_popup": "popup.html"\s+}/],
@@ -81,7 +81,7 @@ describe('Chrome Extension generator test', function () {
 
   it('creates expected files in Page Action', function (done) {
     var expected = [
-      ['component.json', /"name": "temp"/],
+      ['bower.json', /"name": "temp"/],
       ['package.json', /"name": "temp"/],
       'Gruntfile.js',
       ['app/manifest.json', /"page_action": {\s+"default_icon": {\s+"19": "images\/icon-19.png",\s+"38": "images\/icon-38.png"\s+},\s+"default_title": "temp",\s+"default_popup": "popup.html"\s+}/],
@@ -110,7 +110,7 @@ describe('Chrome Extension generator test', function () {
 
   it('creates expected files with Options Page', function (done) {
     var expected = [
-      ['component.json', /"name": "temp"/],
+      ['bower.json', /"name": "temp"/],
       ['package.json', /"name": "temp"/],
       'Gruntfile.js',
       ['app/manifest.json', /"options_page": "options.html"/],
@@ -154,7 +154,7 @@ describe('Chrome Extension generator test', function () {
 
   it('creates expected files with Content-script option', function (done) {
     var expected = [
-      ['component.json', /"name": "temp"/],
+      ['bower.json', /"name": "temp"/],
       ['package.json', /"name": "temp"/],
       'Gruntfile.js',
       ['app/manifest.json', /"content_scripts": \[\s+{\s+"matches": \[\s+"http:\/\/\*\/\*",\s+"https:\/\/\*\/\*"\s+\],\s+"css": \[\s+"styles\/main.css"\s+\],\s+"js": \[\s+"scripts\/contentscript.js"\s+\],\s+"run_at": "document_end",\s+"all_frames": false/],
