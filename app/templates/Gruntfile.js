@@ -76,7 +76,7 @@ module.exports = function (grunt) {
                 '<%%= yeoman.app %>/scripts/{,*/}*.js',
                 'test/spec/{,*/}*.js'
             ]
-        }, <% if (testFramework === 'mocha') { %>
+        },<% if (testFramework === 'mocha') { %>
         mocha: {
             all: {
                 options: {
@@ -84,7 +84,6 @@ module.exports = function (grunt) {
                     urls: ['http://localhost:<%%= connect.options.port %>/index.html']
                 }
             }
-        },
         },<% } else if (testFramework === 'jasmine') { %>
         jasmine: {
             all: {
