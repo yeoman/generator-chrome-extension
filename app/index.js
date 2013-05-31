@@ -231,6 +231,7 @@ ChromeExtensionGenerator.prototype.extensionFiles = function extensionFiles() {
 
 ChromeExtensionGenerator.prototype.packageFiles = function packageFiles() {
   this.copy('_package.json', 'package.json');
+  this.mkdir('app/bower_components');
   this.copy('_bower.json', 'bower.json');
   this.copy('bowerrc', '.bowerrc');
   this.copy('editorconfig', '.editorconfig');
