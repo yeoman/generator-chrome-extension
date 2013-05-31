@@ -33,7 +33,7 @@ var ChromeExtensionGenerator = module.exports = function ChromeExtensionGenerato
   this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
 };
 
-util.inherits(ChromeExtensionGenerator, yeoman.generators.NamedBase);
+util.inherits(ChromeExtensionGenerator, yeoman.generators.Base);
 
 ChromeExtensionGenerator.prototype.askFor = function askFor(argument) {
   var cb = this.async();

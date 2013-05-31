@@ -29,6 +29,7 @@ describe('Chrome Extension generator test', function () {
 
   it('creates expected files in no UI Action', function (done) {
     var expected = [
+      'app/bower_components',
       ['bower.json', /"name": "temp"/],
       ['package.json', /"name": "temp"/],
       'Gruntfile.js',
@@ -52,6 +53,7 @@ describe('Chrome Extension generator test', function () {
 
   it('creates expected files in Browser Action', function (done) {
     var expected = [
+      'app/bower_components',
       ['bower.json', /"name": "temp"/],
       ['package.json', /"name": "temp"/],
       'Gruntfile.js',
@@ -81,6 +83,7 @@ describe('Chrome Extension generator test', function () {
 
   it('creates expected files in Page Action', function (done) {
     var expected = [
+      'app/bower_components',
       ['bower.json', /"name": "temp"/],
       ['package.json', /"name": "temp"/],
       'Gruntfile.js',
@@ -110,6 +113,7 @@ describe('Chrome Extension generator test', function () {
 
   it('creates expected files with Options Page', function (done) {
     var expected = [
+      'app/bower_components',
       ['bower.json', /"name": "temp"/],
       ['package.json', /"name": "temp"/],
       'Gruntfile.js',
@@ -154,6 +158,7 @@ describe('Chrome Extension generator test', function () {
 
   it('creates expected files with Content-script option', function (done) {
     var expected = [
+      'app/bower_components',
       ['bower.json', /"name": "temp"/],
       ['package.json', /"name": "temp"/],
       'Gruntfile.js',
