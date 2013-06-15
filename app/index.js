@@ -42,76 +42,68 @@ ChromeExtensionGenerator.prototype.askFor = function askFor(argument) {
     {
       name: 'name',
       message: 'What would you like to call this extension?',
-      default: (this.appname) ? this.appname : 'myChromeApp',
-      warning: 'You can change the default extension name.'
+      default: (this.appname) ? this.appname : 'myChromeApp'
     },
     {
       name: 'description',
       message: 'How would you like to describe this extension?',
-      default: 'My Chrome Extension',
-      warning: 'You can change the default description.'
+      default: 'My Chrome Extension'
     },
     {
       name: 'action',
-      message: 'Would you like to use UI Action(1: Browser, 2:Page)?',
-      default: '',
-      warning: 'You can change the option'
-      },
+      message: 'Would you like to use UI Action(1: Browser, 2:Page)?'
+    },
     {
+      type: 'confirm',
       name: 'options',
       message: 'Would you like to use the Options Page?',
-      default: false,
-      warning: 'You can change the option'
+      default: false
     },
     {
+      type: 'confirm',
       name: 'omnibox',
       message: 'Would you like to use the Omnibox? (Please input keyword)',
-      default: '',
-      warning: 'You can change the option'
+      default: false
     },
     {
+      type: 'confirm',
       name: 'contentscript',
       message: 'Would you like to use the Content Scripts (Not Programmatic)?',
-      default: false,
-      warning: 'You can change the option'
+      default: false
     },
     {
+      type: 'confirm',
       name: 'tabs',
       message: 'Would you like to declare the "Tabs" permission?',
-      default: false,
-      warning: 'You can change the keyword'
+      default: false
     },
     {
+      type: 'confirm',
       name: 'bookmark',
       message: 'Would you like to declare the "Bookmarks" permission?',
-      default: false,
-      warning: 'You can change the option'
+      default: false
     },
     {
+      type: 'confirm',
       name: 'cookie',
       message: 'Would you like to declare the "Cookies" permission?',
-      default: false,
-      warning: 'You can change the option'
+      default: false
     },
     {
+      type: 'confirm',
       name: 'history',
       message: 'Would you like to declare the "History" permission?',
-      default: false,
-      warning: 'You can change the option'
+      default: false
     },
     {
+      type: 'confirm',
       name: 'management',
       message: 'Would you like to declare the "Management" permission?',
-      default: false,
-      warning: 'You can change the option'
+      default: false
     }
   ];
 
-  this.prompt( prompts , function(err, props) {
-    if (err) {
-      return this.emit('error', err);
-    }
-
+  this.prompt( prompts , function(props) {
     this.appname = this.manifest.name = props.name;
     this.manifest.description = props.description;
     this.manifest.action = ((/1|2/).test(props.action)) ? Math.floor(props.action) : 0;
