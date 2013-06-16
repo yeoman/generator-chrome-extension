@@ -50,8 +50,14 @@ ChromeExtensionGenerator.prototype.askFor = function askFor(argument) {
       default: 'My Chrome Extension'
     },
     {
+      type: 'list',
       name: 'action',
-      message: 'Would you like to use UI Action(1: Browser, 2:Page)?'
+      message: 'Would you like to use UI Action?',
+      choices:[
+        'No',
+        'Browser',
+        'Page'
+      ]
     },
     {
       type: 'confirm',
@@ -60,7 +66,7 @@ ChromeExtensionGenerator.prototype.askFor = function askFor(argument) {
       default: false
     },
     {
-      type: 'confirm',
+      type: 'input',
       name: 'omnibox',
       message: 'Would you like to use the Omnibox? (Please input keyword)',
       default: false
@@ -73,32 +79,43 @@ ChromeExtensionGenerator.prototype.askFor = function askFor(argument) {
     },
     {
       type: 'confirm',
-      name: 'tabs',
-      message: 'Would you like to declare the "Tabs" permission?',
+      name: 'permissions',
+      message: 'Would you like to use permissions?',
       default: false
     },
     {
+      when: function( answers ) {return answers.permissions;},
+      type: 'confirm',
+      name: 'tabs',
+      message: '\t"Tabs" permission',
+      default: false
+    },
+    {
+      when: function( answers ) {return answers.permissions},
       type: 'confirm',
       name: 'bookmark',
-      message: 'Would you like to declare the "Bookmarks" permission?',
+      message: '\t"Bookmarks" permission',
       default: false
     },
     {
+      when: function( answers ) {return answers.permissions},
       type: 'confirm',
       name: 'cookie',
-      message: 'Would you like to declare the "Cookies" permission?',
+      message: '\t"Cookies" permission',
       default: false
     },
     {
+      when: function( answers ) {return answers.permissions},
       type: 'confirm',
       name: 'history',
-      message: 'Would you like to declare the "History" permission?',
+      message: '\t"History" permission',
       default: false
     },
     {
+      when: function( answers ) {return answers.permissions},
       type: 'confirm',
       name: 'management',
-      message: 'Would you like to declare the "Management" permission?',
+      message: '\t"Management" permission',
       default: false
     }
   ];
@@ -106,7 +123,7 @@ ChromeExtensionGenerator.prototype.askFor = function askFor(argument) {
   this.prompt( prompts , function(props) {
     this.appname = this.manifest.name = props.name;
     this.manifest.description = props.description;
-    this.manifest.action = ((/1|2/).test(props.action)) ? Math.floor(props.action) : 0;
+    this.manifest.action = (props.action === 'No') ? 0 : (props.action === 'Browser') ? 1 : 2;
     this.manifest.options = props.options;
     this.manifest.omnibox = props.omnibox;
     this.manifest.contentscript = props.contentscript;

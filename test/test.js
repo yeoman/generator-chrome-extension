@@ -5,7 +5,7 @@ var path = require('path');
 var assert = require('assert');
 var helpers = require('yeoman-generator').test;
 
-describe('Chrome Extension generator test', function () {
+describe('Chrome Extension generator test: ', function () {
   beforeEach(function (done) {
     helpers.testDirectory(path.join(__dirname, 'temp'), function (err) {
       if (err) {
@@ -71,7 +71,7 @@ describe('Chrome Extension generator test', function () {
 
     helpers.mockPrompt(this.extension, {
       'name': 'temp',
-      'action': '1'
+      'action': 'Browser'
     });
 
     this.extension.options['skip-install'] = true;
@@ -101,7 +101,7 @@ describe('Chrome Extension generator test', function () {
 
     helpers.mockPrompt(this.extension, {
       'name': 'temp',
-      'action': '2'
+      'action': 'Page'
     });
 
     this.extension.options['skip-install'] = true;
@@ -129,7 +129,7 @@ describe('Chrome Extension generator test', function () {
 
     helpers.mockPrompt(this.extension, {
       'name': 'temp',
-      'options': 'Y'
+      'options': true
     });
 
     this.extension.options['skip-install'] = true;
@@ -173,7 +173,7 @@ describe('Chrome Extension generator test', function () {
 
     helpers.mockPrompt(this.extension, {
       'name': 'temp',
-      'contentscript': 'Y'
+      'contentscript': true
     });
 
     this.extension.options['skip-install'] = true;
@@ -182,5 +182,33 @@ describe('Chrome Extension generator test', function () {
       done();
     });
   });
+
+  it('creates expected manifest permission properties', function (done) {
+    var expected = [
+      ['app/manifest.json', /"permissions"/],
+      ['app/manifest.json', /"tabs"/],
+      ['app/manifest.json', /"bookmarks"/],
+      ['app/manifest.json', /"cookies"/],
+      ['app/manifest.json', /"history"/],
+      ['app/manifest.json', /\s+"http:\/\/\*\/\*",\s+"https:\/\/\*\/\*"/],
+    ];
+
+    helpers.mockPrompt(this.extension, {
+      'name': 'temp',
+      'permission': true,
+      'tabs': true,
+      'bookmark': true,
+      'cookie': true,
+      'history': true,
+      'management': true,
+    });
+
+    this.extension.options['skip-install'] = true;
+    this.extension.run({}, function () {
+      helpers.assertFiles(expected);
+      done();
+    });
+  });
+
 
 });
