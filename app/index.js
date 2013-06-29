@@ -121,8 +121,8 @@ ChromeExtensionGenerator.prototype.askFor = function askFor(argument) {
   ];
 
   this.prompt( prompts , function(props) {
-    this.appname = this.manifest.name = props.name;
-    this.manifest.description = props.description;
+    this.appname = this.manifest.name = props.name.replace(/\"/g, '\\"');
+    this.manifest.description = props.description.replace(/\"/g, '\\"');
     this.manifest.action = (props.action === 'No') ? 0 : (props.action === 'Browser') ? 1 : 2;
     this.manifest.options = props.options;
     this.manifest.omnibox = props.omnibox;
