@@ -42,6 +42,7 @@ describe('Chrome Extension generator test: ', function () {
 
     helpers.mockPrompt(this.extension, {
       'name': 'temp',
+      'description': 'description',
     });
 
     this.extension.options['skip-install'] = true;
@@ -71,6 +72,7 @@ describe('Chrome Extension generator test: ', function () {
 
     helpers.mockPrompt(this.extension, {
       'name': 'temp',
+      'description': 'description',
       'action': 'Browser'
     });
 
@@ -101,6 +103,7 @@ describe('Chrome Extension generator test: ', function () {
 
     helpers.mockPrompt(this.extension, {
       'name': 'temp',
+      'description': 'description',
       'action': 'Page'
     });
 
@@ -129,6 +132,7 @@ describe('Chrome Extension generator test: ', function () {
 
     helpers.mockPrompt(this.extension, {
       'name': 'temp',
+      'description': 'description',
       'options': true
     });
 
@@ -146,6 +150,7 @@ describe('Chrome Extension generator test: ', function () {
 
     helpers.mockPrompt(this.extension, {
       'name': 'temp',
+      'description': 'description',
       'omnibox': 'omnibox'
     });
 
@@ -173,6 +178,7 @@ describe('Chrome Extension generator test: ', function () {
 
     helpers.mockPrompt(this.extension, {
       'name': 'temp',
+      'description': 'description',
       'contentscript': true
     });
 
@@ -195,6 +201,7 @@ describe('Chrome Extension generator test: ', function () {
 
     helpers.mockPrompt(this.extension, {
       'name': 'temp',
+      'description': 'description',
       'permission': true,
       'tabs': true,
       'bookmark': true,
