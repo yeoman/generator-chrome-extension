@@ -3,7 +3,7 @@
 Maintainer: [Jimmy Moon](https://github.com/ragingwind)
 
 ## Getting Started
-- First make a new directory, and `cd` into it: mkdir my-new-chrome-extension && cd $_
+- First make a new directory, and `cd` into it: mkdir my-new-chrome-extension && cd my-new-chrome-extension
 - Make sure you have [yo](https://github.com/yeoman/yo) installed: `npm install -g yo`
 - Install the generator: `npm install -g generator-chrome-extension`
 - Run: `yo chrome-extension`, optionally passing an extension name: yo chrome-extension [extension-name]
