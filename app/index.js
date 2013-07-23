@@ -60,78 +60,65 @@ ChromeExtensionGenerator.prototype.askFor = function askFor(argument) {
       ]
     },
     {
-      type: 'confirm',
-      name: 'options',
-      message: 'Would you like to use the Options Page?',
-      default: false
+      type: 'checkbox',
+      name: 'uifeatures',
+      message: 'Would you like more UI Features?',
+      choices: [{
+        value: 'options',
+        name: 'Options Page',
+        checked: false
+      }, {
+        value: 'contentscript',
+        name: 'Content Scripts',
+        checked: false
+      }, {
+        value: 'omnibox',
+        name: 'Omnibox',
+        checked: false
+      }]
     },
     {
-      type: 'input',
-      name: 'omnibox',
-      message: 'Would you like to use the Omnibox? (Please input keyword)',
-      default: false
-    },
-    {
-      type: 'confirm',
-      name: 'contentscript',
-      message: 'Would you like to use the Content Scripts (Not Programmatic)?',
-      default: false
-    },
-    {
-      type: 'confirm',
+      type: 'checkbox',
       name: 'permissions',
       message: 'Would you like to use permissions?',
-      default: false
-    },
-    {
-      when: function( answers ) {return answers.permissions;},
-      type: 'confirm',
-      name: 'tabs',
-      message: '\t"Tabs" permission',
-      default: false
-    },
-    {
-      when: function( answers ) {return answers.permissions},
-      type: 'confirm',
-      name: 'bookmark',
-      message: '\t"Bookmarks" permission',
-      default: false
-    },
-    {
-      when: function( answers ) {return answers.permissions},
-      type: 'confirm',
-      name: 'cookie',
-      message: '\t"Cookies" permission',
-      default: false
-    },
-    {
-      when: function( answers ) {return answers.permissions},
-      type: 'confirm',
-      name: 'history',
-      message: '\t"History" permission',
-      default: false
-    },
-    {
-      when: function( answers ) {return answers.permissions},
-      type: 'confirm',
-      name: 'management',
-      message: '\t"Management" permission',
-      default: false
+      choices: [{
+        value: 'tabs',
+        name: 'Tabs',
+        checked: false
+      }, {
+        value: 'bookmark',
+        name: 'Bookmarks',
+        checked: false
+      }, {
+        value: 'cookie',
+        name: 'Cookies',
+        checked: false
+      }, {
+        value: 'history',
+        name: 'History',
+        checked: false
+      }, {
+        value: 'management',
+        name: 'Management',
+        checked: false
+      }]
     }
   ];
 
-  this.prompt( prompts , function(props) {
-    this.appname = this.manifest.name = props.name.replace(/\"/g, '\\"');
-    this.manifest.description = props.description.replace(/\"/g, '\\"');
-    this.manifest.action = (props.action === 'No') ? 0 : (props.action === 'Browser') ? 1 : 2;
-    this.manifest.options = props.options;
-    this.manifest.omnibox = props.omnibox;
-    this.manifest.contentscript = props.contentscript;
-    this.manifest.permissions.tabs = props.tabs;
-    this.manifest.permissions.bookmarks = props.bookmark;
-    this.manifest.permissions.cookies = props.cookie;
-    this.manifest.permissions.history = props.history;
-    this.manifest.permissions.management = props.management;
+  this.prompt( prompts , function(answers) {
+    var isChecked = function (choices, value) { return choices.indexOf(value) > -1; };
+
+    this.appname = this.manifest.name = answers.name.replace(/\"/g, '\\"');
+    this.manifest.description = answers.description.replace(/\"/g, '\\"');
+    this.manifest.action = (answers.action === 'No') ? 0 : (answers.action === 'Browser') ? 1 : 2;
+    this.manifest.options = isChecked(answers.uifeatures, 'options');
+    this.manifest.omnibox = isChecked(answers.uifeatures, 'omnibox');
+    this.manifest.contentscript = isChecked(answers.uifeatures, 'contentscript');
+    this.manifest.permissions.tabs = isChecked(answers.permissions, 'tabs');
+    this.manifest.permissions.bookmarks = isChecked(answers.permissions, 'bookmarks');
+    this.manifest.permissions.cookies = isChecked(answers.permissions, 'cookies');
+    this.manifest.permissions.history = isChecked(answers.permissions, 'history');
+    this.manifest.permissions.management = isChecked(answers.permissions, 'management');
 
     cb();
   }.bind(this));
@@ -160,7 +147,7 @@ ChromeExtensionGenerator.prototype.manifestFiles = function manifestFiles() {
 
   // add omnibox keyword field.
   if (this.manifest.omnibox) {
-    manifest.omnibox = JSON.stringify({ keyword: this.manifest.omnibox }, null, 2).replace(/\n/g, '\n  ');
+    manifest.omnibox = JSON.stringify({ keyword: this.manifest.name }, null, 2).replace(/\n/g, '\n  ');
   }
 
   // add contentscript field.

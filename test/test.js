@@ -43,6 +43,8 @@ describe('Chrome Extension generator test: ', function () {
     helpers.mockPrompt(this.extension, {
       'name': 'temp',
       'description': 'description',
+      uifeatures: [],
+      permissions: []
     });
 
     this.extension.options['skip-install'] = true;
@@ -73,7 +75,9 @@ describe('Chrome Extension generator test: ', function () {
     helpers.mockPrompt(this.extension, {
       'name': 'temp',
       'description': 'description',
-      'action': 'Browser'
+      'action': 'Browser',
+      uifeatures: [],
+      permissions: []
     });
 
     this.extension.options['skip-install'] = true;
@@ -104,7 +108,9 @@ describe('Chrome Extension generator test: ', function () {
     helpers.mockPrompt(this.extension, {
       'name': 'temp',
       'description': 'description',
-      'action': 'Page'
+      'action': 'Page',
+      uifeatures: [],
+      permissions: []
     });
 
     this.extension.options['skip-install'] = true;
@@ -133,7 +139,8 @@ describe('Chrome Extension generator test: ', function () {
     helpers.mockPrompt(this.extension, {
       'name': 'temp',
       'description': 'description',
-      'options': true
+      uifeatures: ['options'],
+      permissions: []
     });
 
     this.extension.options['skip-install'] = true;
@@ -145,13 +152,14 @@ describe('Chrome Extension generator test: ', function () {
 
   it('creates manifest.json with Omnibox option', function (done) {
     var expected = [
-      ['app/manifest.json', /"omnibox": {\s+"keyword": "omnibox"\s+}/]
+      ['app/manifest.json', /"omnibox": {\s+"keyword": "temp"\s+}/]
     ];
 
     helpers.mockPrompt(this.extension, {
       'name': 'temp',
       'description': 'description',
-      'omnibox': 'omnibox'
+      uifeatures: ['omnibox'],
+      permissions: []
     });
 
     this.extension.options['skip-install'] = true;
@@ -179,7 +187,8 @@ describe('Chrome Extension generator test: ', function () {
     helpers.mockPrompt(this.extension, {
       'name': 'temp',
       'description': 'description',
-      'contentscript': true
+      uifeatures: ['contentscript'],
+      permissions: []
     });
 
     this.extension.options['skip-install'] = true;
@@ -202,12 +211,16 @@ describe('Chrome Extension generator test: ', function () {
     helpers.mockPrompt(this.extension, {
       'name': 'temp',
       'description': 'description',
-      'permission': true,
-      'tabs': true,
-      'bookmark': true,
-      'cookie': true,
-      'history': true,
-      'management': true,
+      uifeatures: [],
+      permissions: [
+        'permission',
+        'tabs',
+        'bookmarks',
+        'cookies',
+        'history',
+        'http://*/*',
+        'https://*/*'
+      ]
     });
 
     this.extension.options['skip-install'] = true;
