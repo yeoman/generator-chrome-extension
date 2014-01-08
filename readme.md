@@ -24,15 +24,20 @@ Chrome Extension generator that creates everything you need to get started with 
 
 If you need more information? Please visit [Google Chrome Extension Develpment](http://developer.chrome.com/extensions/devguide.html)
 
-## Test
-To test, go to: chrome://extensions, enable Developer mode and load app as an unpacked extension.
+## Development
+Go to: chrome://extensions, enable Developer mode and load app as an unpacked extension choosing the /app directory. If you desire to use SASS and/or Coffeescript when developing a `grunt watch` task is provided.
 
 ## Build & Package
 By default, generators compress the file that was created by building a js/css/html/resource file. You can distribute the compressed file using the Chrome Developer Dashboard to publish to the Chrome Web Store.
 
 Run this command to build your Chrome Extension project.
 
-```grunt build```
+`grunt build` 
+
+or 
+
+`grunt build --with-sass` if `grunt watch` was used to pre-process your CSS.
+
 
 ## Contribute
 

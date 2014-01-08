@@ -41,7 +41,7 @@ module.exports = function (grunt) {
             },
             compass: {
                 files: ['<%%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
-                tasks: ['compass:server']
+                tasks: ['compass:server', 'clean:main', 'concat:dev']
             }
         },
         connect: {
@@ -72,6 +72,7 @@ module.exports = function (grunt) {
                     ]
                 }]
             },
+            main: '<%%= yeoman.app %>/styles/main.css',
             server: '.tmp'
         },
         jshint: {
@@ -106,7 +107,7 @@ module.exports = function (grunt) {
                     expand: true,
                     cwd: '<%%= yeoman.app %>/scripts',
                     src: '{,*/}*.coffee',
-                    dest: '.tmp/scripts',
+                    dest: '<%%= yeoman.app %>/scripts',
                     ext: '.js'
                 }]
             },
@@ -140,9 +141,11 @@ module.exports = function (grunt) {
                 }
             }
         },
-        // not used since Uglify task does concat,
-        // but still available if needed
-        /*concat: {
+        concat: {
+              dev: {
+                src: ['.tmp/styles/*.css'],
+                dest: '<%%= yeoman.app %>/styles/main.css'
+              },
             dist: {}
         },*/
         // not enabled since usemin task does concat and uglify
@@ -188,6 +191,11 @@ module.exports = function (grunt) {
             }
         },
         cssmin: {
+            'with-sass': {
+                files: {
+                    '<%= yeoman.dist %>/styles/main.css': '.tmp/styles/{,*/}*.css'
+                }
+            },
             dist: {
                 files: {
                     '<%%= yeoman.dist %>/styles/main.css': [
@@ -293,12 +301,13 @@ module.exports = function (grunt) {
         'jasmine'<% } %>
     ]);
 
+    var target = grunt.option('with-sass') ? 'with-sass' : 'dist';
     grunt.registerTask('build', [
         'clean:dist',
         'chromeManifest:dist',
         'useminPrepare',
         'concurrent:dist',
-        'cssmin',
+        'cssmin:' + target,
         'concat',
         'uglify',
         'copy',
