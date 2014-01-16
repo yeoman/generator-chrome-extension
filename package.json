@@ -8,8 +8,6 @@
     "extension",
     "addon"
   ],
-  "homepage": "https://github.com/yeoman/generator-chrome-extension",
-  "bugs": "https://github.com/yeoman/generator-chrome-extension/issues",
   "author": "Chrome Developer Relations",
   "main": "app/index.js",
   "repository": {
@@ -20,18 +18,18 @@
     "test": "mocha --reporter spec"
   },
   "dependencies": {
-    "yeoman-generator": "~0.13.1",
-    "cheerio": "~0.12.1"
+    "yeoman-generator": "~0.16.0",
+    "cheerio": "~0.13.0"
   },
   "peerDependencies": {
-    "generator-mocha": "~0.1.1",
-    "yo": ">=1.0.0-rc.1.1"
+    "generator-mocha": ">=0.1.1",
+    "yo": ">=1.0.0"
   },
   "devDependencies": {
-    "mocha": "~1.12.0"
+    "mocha": "*"
   },
   "engines": {
-    "node": ">=0.8.0",
+    "node": ">=0.10.0",
     "npm": ">=1.2.10"
   },
   "licenses": [
