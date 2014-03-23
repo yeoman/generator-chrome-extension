@@ -7,3 +7,5 @@ chrome.runtime.onInstalled.addListener(function (details) {
 chrome.tabs.onUpdated.addListener(function (tabId) {
     chrome.pageAction.show(tabId);
 });
+
+console.log('\'Allo \'Allo! Event Page for Page Action');

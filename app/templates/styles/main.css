@@ -1,5 +1,3 @@
-/* Will be compiled down to a single stylesheet with your sass files */
-
-html {
-    /* Defaults css for cssmin process */
+body {
+    padding: 20px;
 }

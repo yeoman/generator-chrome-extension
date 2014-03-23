@@ -36,8 +36,7 @@ describe('Chrome Extension generator test: ', function () {
       'app/manifest.json',
       'app/_locales/en/messages.json',
       'app/images/icon-128.png',
-      'app/images/icon-16.png',
-      'app/styles/main.css'
+      'app/images/icon-16.png'
     ];
 
     helpers.mockPrompt(this.extension, {
