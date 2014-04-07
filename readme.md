@@ -26,7 +26,7 @@ Sets up a new Chrome Extension, generating all the boilerplate you need to get s
 
 Example:
 ```bash
-yo chromeapp
+yo chrome-extension
 ```
 
 ## Test Chrome Extension
