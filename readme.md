@@ -10,7 +10,7 @@ Maintainer: [Jimmy Moon](https://github.com/ragingwind)
 - Install the generator: `npm install -g generator-chrome-extension`
 - Run: `yo chrome-extension`, optionally passing an extension name: yo chrome-extension [extension-name]
 
-If you need more information abour Chrome Extension? Please visit [Google Chrome Extension Develpment](http://developer.chrome.com/extensions/devguide.html)
+Need more information about Chrome Extension? Please visit [Google Chrome Extension Develpment](http://developer.chrome.com/extensions/devguide.html)
 
 ![](http://recordit.co/H5y0XHYwgf.gif)
 
