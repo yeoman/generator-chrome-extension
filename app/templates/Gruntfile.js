@@ -170,7 +170,7 @@ module.exports = function (grunt) {
                     expand: true,
                     cwd: 'test/spec',
                     src: '{,*/}*.coffee',
-                    dest: './spec',
+                    dest: 'test/spec',
                     ext: '.js'
                 }]
             }
@@ -382,7 +382,9 @@ module.exports = function (grunt) {
 
     grunt.registerTask('debug', function () {
         grunt.task.run([
-            'jshint',
+            <%if (coffee) { %>
+            <% } else { %>
+            'jshint',<% } %>
             'concurrent:chrome',
             'connect:chrome',
             'watch'
@@ -409,7 +411,9 @@ module.exports = function (grunt) {
     ]);
 
     grunt.registerTask('default', [
-        'jshint',
+        <%if (coffee) { %>
+        'coffee',<% } else { %>
+        'jshint',<% } %>
         'test',
         'build'
     ]);
