@@ -382,8 +382,9 @@ module.exports = function (grunt) {
 
     grunt.registerTask('debug', function () {
         grunt.task.run([
-            <%if !(coffee) { %>
-            'jshint',<% }
+            <%if (coffee) { %>
+            <% } else { %>
+            'jshint',<% } %>
             'concurrent:chrome',
             'connect:chrome',
             'watch'
@@ -412,7 +413,7 @@ module.exports = function (grunt) {
     grunt.registerTask('default', [
         <%if (coffee) { %>
         'coffee',<% } else { %>
-        'jshint',<% }
+        'jshint',<% } %>
         'test',
         'build'
     ]);
