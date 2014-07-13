@@ -8,6 +8,33 @@ module.exports = yeoman.generators.Base.extend({
   constructor: function (args, options, config) {
     yeoman.generators.Base.apply(this, arguments);
 
+    // setup the test-framework property, Gruntfile template will need this
+    this.option('test-framework', {
+      desc: 'Test framework to be invoked',
+      type: String,
+      defaults: 'mocha'
+    });
+    this.testFramework = this.options['test-framework'];
+   
+    // setup the coffee property
+    this.option('coffee', {
+      desc: 'Use CoffeeScript',
+      type: Boolean,
+      defaults: false
+    });
+    this.coffee = this.options.coffee;
+
+    // setup the coffee property
+    this.option('compass', {
+      desc: 'Use Compass',
+      type: Boolean,
+      defaults: false
+    });
+    this.compass = this.options.compass;
+    
+    // load package
+    this.pkg = require('../package.json');
+    
     // set source root path to templates
     this.sourceRoot(path.join(__dirname, 'templates'));
 
@@ -15,11 +42,6 @@ module.exports = yeoman.generators.Base.extend({
     this.manifest = {
       permissions:{}
     };
-
-    // setup the test-framework property, Gruntfile template will need this
-    this.testFramework = options['test-framework'] || 'mocha';
-    this.coffee = options.coffee;
-    this.compass = options.compass;
 
     // copy script with js or coffee extension
     this.copyjs = function copyjs(src, dest) {
@@ -29,24 +51,6 @@ module.exports = yeoman.generators.Base.extend({
       dest = dest ? dest + ext : src;
       this.copy((this.coffee ? 'coffees/' : 'scripts/') + src, 'app/scripts/' + dest);
     };
-
-    // for hooks to resolve on mocha by default
-    options['test-framework'] = this.testFramework;
-
-    // resolved to mocha by default (could be switched to jasmine for instance)
-    this.hookFor('test-framework', {
-      as: 'app',
-      options: {
-        options: {
-          'skip-install': options['skip-install-message'],
-          'skip-message': options['skip-install']
-        }
-      }
-    });
-
-    this.options = options;
-
-    this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
   },
 
   askFor: function (argument) {
@@ -291,15 +295,21 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   install: function () {
-    if (this.options['skip-install']) {
-      return;
-    }
+    this.on('end', function () {
+      this.invoke(this.options['test-framework'], {
+        options: {
+          'skip-message': this.options['skip-install-message'],
+          'skip-install': this.options['skip-install'],
+          'coffee': this.options.coffee
+        }
+      });
 
-    var done = this.async();
-    this.installDependencies({
-      skipMessage: this.options['skip-install-message'],
-      skipInstall: this.options['skip-install'],
-      callback: done
+      if (!this.options['skip-install']) {
+        this.installDependencies({
+          skipMessage: this.options['skip-install-message'],
+          skipInstall: this.options['skip-install']
+        });
+      }
     });
   }
 });
