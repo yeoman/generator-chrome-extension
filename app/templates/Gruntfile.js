@@ -369,7 +369,7 @@ module.exports = function (grunt) {
                 options: {
                     archive: function() {
                         var manifest = grunt.file.readJSON('app/manifest.json');
-                        return 'package/ch3-' + manifest.version + '.zip';
+                        return 'package/<%= appname %>-' + manifest.version + '.zip';
                     }
                 },
                 files: [{
