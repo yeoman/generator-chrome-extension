@@ -13,6 +13,6 @@ connection = new WebSocket('ws://' + LIVERELOAD_HOST + LIVERELOAD_PORT + '/liver
 connection.onerror = (e) -> console.log('reload connection got error' + JSON.stringify(e))
 
 connection.onmessage = (e) ->
-    if e.data
-        data = JSON.parse(e.data)
-        if data and data.command == 'reload' then chrome.runtime.reload()
+  if e.data
+    data = JSON.parse(e.data)
+    if data and data.command == 'reload' then chrome.runtime.reload()
