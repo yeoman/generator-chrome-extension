@@ -37,7 +37,7 @@ describe('Chrome Extension generator', function () {
       done();
     });
   });
-  
+
   it('creates expected files in no UI Action', function (done) {
     var expected = [
       'app/bower_components',
@@ -51,13 +51,15 @@ describe('Chrome Extension generator', function () {
     runGen.withOptions(options).withPrompt(
       _.extend(prompts, {
         'name': 'temp',
-        'description': 'description'
+        'description': 'description',
+        'action': 'No'
       })
     ).on('end', function () {
       assert.file(expected);
       assert.fileContent([
         ['bower.json', /"name": "temp"/],
-        ['package.json', /"name": "temp"/]
+        ['package.json', /"name": "temp"/],
+        ['Gruntfile.js', /\/\/ No UI feature selected, cssmin task will be commented\n\s+\/\/ 'cssmin'/]
       ]);
       done();
     });
