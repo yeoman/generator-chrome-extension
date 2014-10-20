@@ -104,15 +104,24 @@ module.exports = function (grunt) {
     clean: {
       chrome: {
       },
-      dist: {
+      diststart: {
         files: [{
           dot: true,
-          src: [
+          src: [<% if (compass) { %>
+            '<%%= config.app %>/styles/{,*/}*.css',<% } %>
             '<%%= config.dist %>/*',
             '!<%%= config.dist %>/.git*'
           ]
         }]
-      }
+      }<% if (compass) { %>,
+      distend: {
+        files: [{
+          dot: true,
+          src: [
+            '<%%= config.app %>/styles/{,*/}*.css'
+          ]
+        }]
+      }<% } %>
     },
 
     // Make sure code styles are up to par and there are no obvious mistakes
@@ -179,7 +188,7 @@ module.exports = function (grunt) {
     compass: {
       options: {
         sassDir: '<%%= config.app %>/styles',
-        cssDir: '<%%= config.dist %>/styles',
+        cssDir: '<%%= config.app %>/styles',
         generatedImagesDir: '<%%= config.dist %>/images/generated',
         imagesDir: '<%%= config.app %>/images',
         javascriptsDir: '<%%= config.app %>/scripts',
@@ -189,11 +198,11 @@ module.exports = function (grunt) {
         httpGeneratedImagesPath: '/images/generated',
         httpFontsPath: '/styles/fonts',
         relativeAssets: false,
-        assetCacheBuster: false
+        assetCacheBuster: false,
+        noLineComments: true
       },
       chrome: {
         options: {
-          cssDir: '<%%= config.app %>/styles',
           generatedImagesDir: '<%%= config.app %>/images/generated',
           debugInfo: true
         }
@@ -320,7 +329,6 @@ module.exports = function (grunt) {
             '*.{ico,png,txt}',
             'images/{,*/}*.{webp,gif}',
             '{,*/}*.html',
-            'styles/{,*/}*.css',
             'styles/fonts/{,*/}*.*',
             '_locales/{,*/}*.json',
           ]
@@ -398,17 +406,18 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('build', [
-    'clean:dist',
+    'clean:diststart',
     'chromeManifest:dist',
     'useminPrepare',
     'concurrent:dist',
+    'concat',
     <% if (manifest.action === 0) { %>// No UI feature selected, cssmin task will be commented
     // <% } %>'cssmin',
-    'concat',
     'uglify',
     'copy',
     'usemin',
-    'compress'
+    'compress'<% if (compass) { %>,
+    'clean:distend'<% } %>
   ]);
 
   grunt.registerTask('default', [
