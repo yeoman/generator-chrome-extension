@@ -5,13 +5,14 @@
   "bitwise": true,
   "camelcase": true,
   "curly": true,
-  "eqeqeq": true,
+  "eqeqeq": true,<%if (coffee) { %>
+  "eqnull": true,<% } %>
   "immed": true,
   "indent": 2,
   "latedef": true,
   "newcap": true,
   "noarg": true,
-  "quotmark": "single",
+  "quotmark": <%if (coffee) { %>false<% } else { %>"single"<% } %>,
   "regexp": true,
   "undef": true,
   "unused": true,
@@ -19,6 +20,7 @@
   "trailing": true,
   "smarttabs": true,
   "globals" : {
-    "chrome": true
+    "chrome": true,
+    "crypto": true
   }
 }
