@@ -33,14 +33,9 @@ yo chrome-extension
 
 To test, go to: chrome://extensions, enable Developer mode and load app as an unpacked extension.
 
-## Debug
+## Auto-reloading the Extension
 
-Support for LiveReload
-
-Example:
-```bash
-grunt debug
-```
+Use `grunt debug` while developing. It automatically reloads the extension on Chrome when the files change. Fun fact: [this uses LiveReload behind the scenes](https://github.com/yeoman/generator-chrome-extension/issues/31#issuecomment-23689128).
 
 ## Build & Package
 
