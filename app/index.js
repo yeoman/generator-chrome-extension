@@ -15,7 +15,7 @@ module.exports = yeoman.generators.Base.extend({
       defaults: 'mocha'
     });
     this.testFramework = this.options['test-framework'];
-   
+
     // setup the coffee property
     this.option('coffee', {
       desc: 'Use CoffeeScript',
@@ -31,10 +31,10 @@ module.exports = yeoman.generators.Base.extend({
       defaults: false
     });
     this.compass = this.options.compass;
-    
+
     // load package
     this.pkg = require('../package.json');
-    
+
     // set source root path to templates
     this.sourceRoot(path.join(__dirname, 'templates'));
 
@@ -203,7 +203,6 @@ module.exports = yeoman.generators.Base.extend({
     if (this.manifest.contentscript) {
       var contentscript = [{
         matches: ['http://*/*', 'https://*/*'],
-        css: ['styles/main.css'],
         js: ['scripts/contentscript.js'],
         run_at: 'document_end',
         all_frames: false
