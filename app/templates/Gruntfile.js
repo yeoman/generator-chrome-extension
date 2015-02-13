@@ -36,14 +36,14 @@ module.exports = function (grunt) {
         files: ['<%%= config.app %>/scripts/{,*/}*.{coffee,litcoffee,coffee.md}'],
         tasks: ['coffee:chrome'],
         options: {
-          livereload: true
+          livereload: '<%%= connect.options.livereload %>'
         }
       },<%} else { %>
       js: {
         files: ['<%%= config.app %>/scripts/{,*/}*.js'],
         tasks: ['jshint'],
         options: {
-          livereload: true
+          livereload: '<%%= connect.options.livereload %>'
         }
       },<% } %><% if (compass) { %>
       compass: {
@@ -57,7 +57,7 @@ module.exports = function (grunt) {
         files: ['<%%= config.app %>/styles/{,*/}*.css'],
         tasks: [],
         options: {
-          livereload: true
+          livereload: '<%%= connect.options.livereload %>'
         }
       },
       livereload: {
