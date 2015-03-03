@@ -216,4 +216,36 @@ describe('Chrome Extension generator', function () {
       done();
     });
   });
+
+  it('creates project files', function (done) {
+    var expected = [
+      '.gitignore',
+      '.gitattributes',
+      '.bowerrc',
+      '.jshintrc',
+      '.jscsrc',
+      '.editorconfig',
+      'Gruntfile.js',
+      'bower.json',
+      'package.json',
+      'app/manifest.json',
+      'app/scripts/background.js',
+      'app/scripts/chromereload.js',
+      'app/_locales/en/messages.json',
+      'app/images/icon-16.png',
+      'app/images/icon-128.png',
+      'app/styles/main.css'
+    ];
+
+    runGen.withOptions(options).withPrompt(
+      _.extend(prompts, {
+        'name': 'temp',
+        'description': 'description',
+        'action': 'No'
+      })
+    ).on('end', function () {
+      helpers.assertFile(expected);
+      done();
+    });
+  });
 });
