@@ -1,19 +1,16 @@
 {
   "name": "generator-chrome-extension",
   "version": "0.3.0",
-  "description": "Yeoman generator for Chrome Extensions",
+  "description": "Scaffold out a Chrome extension",
   "keywords": [
     "yeoman-generator",
     "chrome",
     "extension",
     "addon"
   ],
-  "author": "The Yeoman Team",
+  "author": "Yeoman",
   "main": "app/index.js",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/yeoman/generator-chrome-extension.git"
-  },
+  "repository": "yeoman/generator-chrome-extension",
   "scripts": {
     "test": "mocha --reporter spec"
   },
@@ -21,20 +18,17 @@
     "yeoman-generator": "^0.17.0"
   },
   "peerDependencies": {
-    "generator-mocha": ">=0.1.6",
-    "yo": ">=1.0.0"
+    "generator-mocha": ">=0.1.6"
   },
   "devDependencies": {
     "mocha": "*",
     "underscore": "^1.6.0"
   },
   "engines": {
-    "node": ">=0.10.0",
-    "npm": ">=1.2.10"
+    "node": ">=0.10.0"
   },
-  "licenses": [
-    {
-      "type": "BSD"
-    }
+  "license": "BSD",
+  "files": [
+    "app"
   ]
 }
