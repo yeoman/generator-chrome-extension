@@ -22,7 +22,7 @@
     "grunt-mocha": "~0.4.10",<% } %>
     "grunt-svgmin": "~0.4.0",
     "grunt-concurrent": "~0.5.0",
-    "load-grunt-tasks": "~0.4.0",
+    "jit-grunt": "^0.9.1",
     "time-grunt": "~0.3.1",
     "jshint-stylish": "~0.1.5",
     "grunt-chrome-manifest": "~0.2.0",
