@@ -1,6 +1,8 @@
 {
   "node": true,
-  "browser": true,
+  "browser": true,<% if (testFramework === 'mocha') { %>
+  "mocha": true,<% } else if (testFramework === 'jasmine') { %>
+  "jasmine": true,<% } %>
   "esnext": true,
   "bitwise": true,
   "camelcase": true,
@@ -13,12 +15,9 @@
   "newcap": true,
   "noarg": true,
   "quotmark": <%if (coffee) { %>false<% } else { %>"single"<% } %>,
-  "regexp": true,
   "undef": true,
   "unused": true,
   "strict": true,
-  "trailing": true,
-  "smarttabs": true,
   "globals" : {
     "chrome": true,
     "crypto": true
