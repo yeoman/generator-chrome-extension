@@ -1,6 +1,9 @@
 {
   "name": "<%= _.slugify(appname) %>",
   "version": "0.0.0",
-  "dependencies": {},
+  "dependencies": {
+    "mocha": "~2.2.5",
+    "chai": "~3.2.0"
+  },
   "devDependencies": {}
 }
