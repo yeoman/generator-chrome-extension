@@ -1,8 +1,12 @@
 {
   "name": "<%= _.slugify(appname) %>",
   "version": "0.0.0",
+  "scripts": {
+    "postinstall": "bower install"
+  },
   "dependencies": {},
   "devDependencies": {
+    "bower": "^1.4.1",
     "grunt": "~0.4.1",
     "grunt-contrib-copy": "~0.5.0",
     "grunt-contrib-concat": "~0.3.0",<% if (coffee) { %>
