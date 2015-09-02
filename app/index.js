@@ -1,4 +1,5 @@
 'use strict';
+var fs = require('fs');
 var path = require('path');
 var util = require('util');
 var spawn = require('child_process').spawn;
@@ -16,15 +17,14 @@ module.exports = yeoman.generators.Base.extend({
     });
     this.testFramework = this.options['test-framework'];
 
-    // setup the coffee property
-    this.option('coffee', {
-      desc: 'Use CoffeeScript',
+    this.option('babel', {
       type: Boolean,
-      defaults: false
+      defaults: true,
+      desc: 'Compile ES2015 using Babel'
     });
-    this.coffee = this.options.coffee;
+    this.babel = this.options.babel;
 
-    // setup the coffee property
+    // setup the compass property
     this.option('compass', {
       desc: 'Use Compass',
       type: Boolean,
@@ -43,13 +43,20 @@ module.exports = yeoman.generators.Base.extend({
       permissions:{}
     };
 
-    // copy script with js or coffee extension
+    // copy es2015 or es5 source file
     this.copyjs = function copyjs(src, dest) {
-      var ext = this.coffee ? '.coffee' : '.js';
+      var srcFile = src + '.js';
 
-      src = src + ext;
-      dest = dest ? dest + ext : src;
-      this.copy((this.coffee ? 'coffees/' : 'scripts/') + src, 'app/scripts/' + dest);
+      if (this.babel) {
+        var es6File = path.join(__dirname, 'templates', 'scripts', src + '.es6');
+        if (fs.existsSync(es6File)) {
+          srcFile = src + '.es6';
+          dest = src;
+        }
+      }
+
+      dest = dest ? dest + '.js' : srcFile;
+      this.copy('scripts/' + srcFile, 'app/scripts/' + dest);
     };
   },
 
@@ -278,6 +285,13 @@ module.exports = yeoman.generators.Base.extend({
     this.copyjs('contentscript');
   },
 
+  babel: function () {
+    if (!this.babel) {
+      return;
+    }
+    this.copy('babelrc', '.babelrc');
+  },
+
   mainStylesheet: function () {
     if (this.manifest.action === 0 && !this.manifest.options) {
       return;
@@ -298,8 +312,7 @@ module.exports = yeoman.generators.Base.extend({
       this.invoke(this.options['test-framework'], {
         options: {
           'skip-message': this.options['skip-install-message'],
-          'skip-install': this.options['skip-install'],
-          'coffee': this.options.coffee
+          'skip-install': this.options['skip-install']
         }
       });
 

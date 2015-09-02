@@ -1,10 +1,16 @@
 /*global describe, it */
 'use strict';
 
+var fs = require('fs');
 var path = require('path');
 var helpers = require('yeoman-generator').test;
 var assert = require('assert');
 var _ = require('underscore');
+
+function pkgContainsDevDependencies(dependency) {
+  var pkg = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
+  return pkg.devDependencies[dependency] !== undefined;
+}
 
 describe('Chrome Extension generator', function () {
   if ('the generator can be required without throwing', function () {
@@ -12,7 +18,8 @@ describe('Chrome Extension generator', function () {
   });
 
   var options = {
-    'skip-install': true
+    'skip-install': true,
+    'babel': true
   };
 
   var prompts = {
@@ -35,6 +42,48 @@ describe('Chrome Extension generator', function () {
           [helpers.createDummyGenerator(), 'mocha:app']
         ]);
       done();
+    });
+  });
+
+  describe('creates expected files when running on new project', function () {
+
+    beforeEach(function(done) {
+      runGen.withOptions(options).withPrompt(
+        _.extend(prompts, {
+          'name': 'temp',
+          'description': 'description',
+          'action': 'No'
+        })
+      ).on('end', function() {
+        done();
+      });
+    });
+
+    it('creates .bablerc', function() {
+      assert.file('.babelrc');
+    });
+
+    it('adds babel\'s devDependencies', function () {
+      assert(pkgContainsDevDependencies('grunt-babel'));
+    });
+
+    it('creates expected files ', function() {
+      var expected = [
+        '.editorconfig',
+        '.jshintrc',
+        '.bowerrc',
+        '.gitignore',
+        '.gitattributes',
+        'package.json',
+        'bower.json',
+        'Gruntfile.js',
+        'app/manifest.json'
+      ];
+
+      assert.file(expected);
+      assert.fileContent([
+        ['app/scripts/chromereload.js', /const\sLIVERELOAD_HOST\s=/]
+      ]);
     });
   });
 
@@ -214,6 +263,35 @@ describe('Chrome Extension generator', function () {
         ['app/manifest.json', /\s+"http:\/\/\*\/\*",\s+"https:\/\/\*\/\*"/],
       ]);
       done();
+    });
+  });
+
+  describe('--no-babel', function() {
+
+    beforeEach(function(done) {
+      runGen.withOptions({
+        'babel': false
+      }).withPrompt(prompts)
+      .on('end', done);
+    });
+
+    it('skip .bablerc', function () {
+        assert.noFile('.babelrc');
+    });
+
+    it('skip babel\'s devDependencies', function () {
+      assert(!pkgContainsDevDependencies('grunt-babel'));
+    });
+
+    it('creates expected background and chromereload file', function () {
+      var expected = [
+        'app/scripts/background.js',
+        'app/scripts/chromereload.js'
+      ];
+      assert.file(expected);
+      assert.fileContent([
+        ['app/scripts/chromereload.js', /var\sLIVERELOAD_HOST\s=/]
+      ]);
     });
   });
 });

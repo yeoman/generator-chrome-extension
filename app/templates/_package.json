@@ -3,13 +3,13 @@
   "version": "0.0.0",
   "dependencies": {},
   "devDependencies": {
-    "grunt": "~0.4.1",
+    "grunt": "~0.4.1",<% if (babel) { %>
+    "grunt-babel": "^5.0.1",<% } %>
     "grunt-contrib-copy": "~0.5.0",
-    "grunt-contrib-concat": "~0.3.0",<% if (coffee) { %>
-    "grunt-contrib-coffee": "~0.10.1",<% } %>
+    "grunt-contrib-concat": "~0.3.0",
     "grunt-contrib-uglify": "~0.4.0",<% if (compass) { %>
     "grunt-contrib-compass": "~0.7.0",<% } %>
-    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-contrib-jshint": "~0.11.2",
     "grunt-contrib-cssmin": "~0.9.0",
     "grunt-contrib-connect": "~0.7.1",
     "grunt-contrib-clean": "~0.5.0",
