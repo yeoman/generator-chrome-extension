@@ -33,21 +33,14 @@ module.exports = function (grunt) {
       bower: {
         files: ['bower.json'],
         tasks: ['bowerInstall']
-      },<%if (coffee) { %>
-      coffee: {
-        files: ['<%%= config.app %>/scripts/{,*/}*.{coffee,litcoffee,coffee.md}'],
-        tasks: ['coffee:chrome'],
-        options: {
-          livereload: '<%%= connect.options.livereload %>'
-        }
-      },<%} else { %>
+      },
       js: {
         files: ['<%%= config.app %>/scripts/{,*/}*.js'],
-        tasks: ['jshint'],
+        tasks: ['jshint', 'babel'],
         options: {
           livereload: '<%%= connect.options.livereload %>'
         }
-      },<% } %><% if (compass) { %>
+      },<% if (compass) { %>
       compass: {
         files: ['<%%= config.app %>/styles/{,*/}*.{scss,sass}'],
         tasks: ['compass:chrome']
@@ -73,7 +66,23 @@ module.exports = function (grunt) {
           '<%%= config.app %>/_locales/{,*/}*.json'
         ]
       }
-    },
+    },<% if (babel) { %>
+
+    // Compiles ES6 with Babel
+    babel: {
+      options: {
+        sourceMap: true
+      },
+      dist: {
+        files: [{
+          expand: true,
+          cwd: '<%%= config.app %>/scripts',
+          src: '{,*/}*.js',
+          dest: '<%%= config.dist %>/scripts',
+          ext: '.js'
+        }]
+      }
+    },<% } %>
 
     // Grunt server and debug server setting
     connect: {
@@ -143,37 +152,6 @@ module.exports = function (grunt) {
         options: {
           specs: 'test/spec/{,*/}*.js'
         }
-      }
-    },<% } %><% if (coffee) { %>
-
-    // Compiles CoffeeScript to JavaScript
-    coffee: {
-      chrome: {
-        files: [{
-          expand: true,
-          cwd: '<%%= config.app %>/scripts',
-          src: '{,*/}*.{coffee,litcoffee,coffee.md}',
-          dest: '<%%= config.app %>/scripts',
-          ext: '.js'
-        }]
-      },
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '<%%= config.app %>/scripts',
-          src: '{,*/}*.{coffee,litcoffee,coffee.md}',
-          dest: '<%%= config.app %>/scripts',
-          ext: '.js'
-        }]
-      },
-      test: {
-        files: [{
-          expand: true,
-          cwd: 'test/spec',
-          src: '{,*/}*.coffee',
-          dest: './spec',
-          ext: '.js'
-        }]
       }
     },<% } %><% if (compass) { %>
 
@@ -332,18 +310,15 @@ module.exports = function (grunt) {
 
     // Run some tasks in parallel to speed up build process
     concurrent: {
-      chrome: [<%if (coffee) { %>
-        'coffee:chrome',<% } if (compass) { %>
+      chrome: [<% if (compass) { %>
         'compass:chrome',<% } %>
       ],
-      dist: [<% if (coffee) { %>
-        'coffee:dist',<% } if (compass) { %>
+      dist: [<% if (compass) { %>
         'compass:dist',<% } %>
         'imagemin',
         'svgmin'
       ],
-      test: [<%if (coffee) { %>
-        'coffee:test',<% } if (compass) { %>
+      test: [<% if (compass) { %>
         'compass:test',<% } %>
       ]
     },
@@ -389,7 +364,8 @@ module.exports = function (grunt) {
     grunt.task.run([
       'jshint',
       'concurrent:chrome',
-      'connect:chrome',
+      'connect:chrome',<% if (babel) { %>
+      'babel',<% } %>
       'watch'
     ]);
   });
@@ -402,7 +378,8 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
-    'chromeManifest:dist',
+    'chromeManifest:dist',<% if (babel) { %>
+    'babel',<% } %>
     'useminPrepare',
     'concurrent:dist',
     <% if (manifest.action === 0) { %>// No UI feature selected, cssmin task will be commented
