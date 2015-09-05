@@ -200,7 +200,12 @@ module.exports = yeoman.generators.Base.extend({
 
     // add options page field.
     if (this.manifest.options) {
+      var options_ui = {
+        "page": "options.html",
+        "chrome_style": true
+      };
       manifest.options_page = '"options.html"';
+      manifest.options_ui = JSON.stringify(options_ui, null, 2).replace(/\n/g, '\n  ');
     }
 
     // add omnibox keyword field.
