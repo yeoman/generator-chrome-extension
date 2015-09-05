@@ -1,6 +1,6 @@
 {
-  "name": "<%= _.slugify(appname) %>",
-  "version": "0.0.0",
+  "name": "<%= appnameForConfig %>",
+  "private": true,
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.1",<% if (babel) { %>

@@ -4,6 +4,7 @@ var path = require('path');
 var util = require('util');
 var spawn = require('child_process').spawn;
 var yeoman = require('yeoman-generator');
+var _s = require('underscore.string');
 
 module.exports = yeoman.generators.Base.extend({
   constructor: function (args, options, config) {
@@ -134,6 +135,7 @@ module.exports = yeoman.generators.Base.extend({
       var isChecked = function (choices, value) { return choices.indexOf(value) > -1; };
 
       this.appname = this.manifest.name = answers.name.replace(/\"/g, '\\"');
+      this.appnameForConfig = _s.slugify(this.appname);
       this.manifest.description = answers.description.replace(/\"/g, '\\"');
       this.manifest.action = (answers.action === 'No') ? 0 : (answers.action === 'Browser') ? 1 : 2;
       this.manifest.options = isChecked(answers.uifeatures, 'options');
