@@ -1,5 +1,5 @@
 {
-  "name": "<%= appnameForConfig %>",
+  "name": "<%= name %>",
   "private": true,
   "dependencies": {},
   "devDependencies": {
