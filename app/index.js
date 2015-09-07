@@ -1,37 +1,35 @@
 'use strict';
 var fs = require('fs');
 var path = require('path');
-var util = require('util');
 var spawn = require('child_process').spawn;
 var yeoman = require('yeoman-generator');
 var _s = require('underscore.string');
+var mkdirp = require('mkdirp');
 
 module.exports = yeoman.generators.Base.extend({
   constructor: function (args, options, config) {
+    var testLocal;
+
     yeoman.generators.Base.apply(this, arguments);
 
-    // setup the test-framework property, Gruntfile template will need this
+    // preapre options
     this.option('test-framework', {
       desc: 'Test framework to be invoked',
       type: String,
       defaults: 'mocha'
     });
-    this.testFramework = this.options['test-framework'];
 
     this.option('babel', {
       type: Boolean,
       defaults: true,
       desc: 'Compile ES2015 using Babel'
     });
-    this.babel = this.options.babel;
 
-    // setup the compass property
     this.option('compass', {
       desc: 'Use Compass',
       type: Boolean,
       defaults: false
     });
-    this.compass = this.options.compass;
 
     // load package
     this.pkg = require('../package.json');
@@ -44,11 +42,25 @@ module.exports = yeoman.generators.Base.extend({
       permissions:{}
     };
 
+    if (this.options['test-framework'] === 'mocha') {
+      testLocal = require.resolve('generator-mocha/generators/app/index.js');
+    } else if (this.options['test-framework'] === 'jasmine') {
+      testLocal = require.resolve('generator-jasmine/generators/app/index.js');
+    }
+
+    this.composeWith(this.options['test-framework'] + ':app', {
+      options: {
+        'skip-install': this.options['skip-install']
+      }
+    }, {
+      local: testLocal
+    });
+
     // copy es2015 or es5 source file
     this.copyjs = function copyjs(src, dest) {
       var srcFile = src + '.js';
 
-      if (this.babel) {
+      if (this.options.babel) {
         var es6File = path.join(__dirname, 'templates', 'scripts', src + '.es6');
         if (fs.existsSync(es6File)) {
           srcFile = src + '.es6';
@@ -57,7 +69,10 @@ module.exports = yeoman.generators.Base.extend({
       }
 
       dest = dest ? dest + '.js' : srcFile;
-      this.copy('scripts/' + srcFile, 'app/scripts/' + dest);
+      this.fs.copy(
+        this.templatePath('scripts/' + srcFile), 
+        this.destinationPath('app/scripts/' + dest)
+      );
     };
   },
 
@@ -135,7 +150,6 @@ module.exports = yeoman.generators.Base.extend({
       var isChecked = function (choices, value) { return choices.indexOf(value) > -1; };
 
       this.appname = this.manifest.name = answers.name.replace(/\"/g, '\\"');
-      this.appnameForConfig = _s.slugify(this.appname);
       this.manifest.description = answers.description.replace(/\"/g, '\\"');
       this.manifest.action = (answers.action === 'No') ? 0 : (answers.action === 'Browser') ? 1 : 2;
       this.manifest.options = isChecked(answers.uifeatures, 'options');
@@ -152,34 +166,76 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   app: function () {
-    this.mkdir('app');
-    this.mkdir('app/bower_components');
+    mkdirp('app');
+    mkdirp('app/bower_components');
   },
 
   gruntfile: function () {
-    this.template('Gruntfile.js');
+    this.fs.copyTpl(
+      this.templatePath('Gruntfile.js'),
+      this.destinationPath('Gruntfile.js'),
+      {
+        name: this.appname,
+        pkg: this.pkg,
+        manifest: this.manifest,
+        babel: this.options.babel,
+        testFramework: this.options['test-framework'],
+        compass: this.options.compass
+      }
+    );
   },
 
   packageJSON: function () {
-    this.template('_package.json', 'package.json');
+    this.fs.copyTpl(
+      this.templatePath('_package.json'),
+      this.destinationPath('package.json'),
+      {
+        name: _s.slugify(this.appname),
+        babel: this.options.babel,
+        testFramework: this.options['test-framework'],
+        compass: this.options.compass
+      }
+    );
   },
 
   git: function () {
-    this.copy('gitignore', '.gitignore');
-    this.copy('gitattributes', '.gitattributes');
+    this.fs.copy(
+      this.templatePath('gitignore'),
+      this.destinationPath('.gitignore')
+    );
+
+    this.fs.copy(
+      this.templatePath('gitattributes'),
+      this.destinationPath('.gitattributes')
+    );
   },
 
   bower: function () {
     this.copy('bowerrc', '.bowerrc');
-    this.copy('_bower.json', 'bower.json');
+    this.fs.copyTpl(
+      this.templatePath('_bower.json'),
+      this.destinationPath('bower.json'),
+      {
+        name: _s.slugify(this.appname)
+      }
+    );
   },
 
   jshint: function () {
-    this.copy('jshintrc', '.jshintrc');
+    this.fs.copyTpl(
+      this.templatePath('jshintrc'),
+      this.destinationPath('.jshintrc'),
+      {
+        testFramework: this.options['test-framework']
+      }
+    );
   },
 
   editorConfig: function () {
-    this.copy('editorconfig', '.editorconfig');
+    this.fs.copy(
+      this.templatePath('editorconfig'),
+      this.destinationPath('.editorconfig')
+    );
   },
 
   manifest: function () {
@@ -248,18 +304,34 @@ module.exports = yeoman.generators.Base.extend({
 
     this.manifest.items = (items.length > 0) ? ',\n' + items.join(',\n') : '';
 
-    this.template('manifest.json', 'app/manifest.json');
+    this.fs.copyTpl(
+      this.templatePath('manifest.json'),
+      this.destinationPath('app/manifest.json'),
+      this.manifest
+    );
   },
 
   actions: function () {
     if (this.manifest.action === 0) {
       return;
     }
-
-    this.copy('popup.html', 'app/popup.html');
+    
+    this.fs.copy(
+      this.templatePath('popup.html'),
+      this.destinationPath('app/popup.html')
+    );
+    
     this.copyjs('popup');
-    this.copy('images/icon-19.png', 'app/images/icon-19.png');
-    this.copy('images/icon-38.png', 'app/images/icon-38.png');
+
+    this.fs.copy(
+      this.templatePath('images/icon-19.png'),
+      this.destinationPath('app/images/icon-19.png')
+    );
+    
+    this.fs.copy(
+      this.templatePath('images/icon-38.png'),
+      this.destinationPath('app/images/icon-38.png')
+    );
   },
 
   eventpage: function () {
@@ -280,7 +352,11 @@ module.exports = yeoman.generators.Base.extend({
       return;
     }
 
-    this.copy('options.html', 'app/options.html');
+    this.fs.copy(
+      this.templatePath('options.html'),
+      this.destinationPath('app/options.html')
+    );
+
     this.copyjs('options');
   },
 
@@ -293,10 +369,14 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   babel: function () {
-    if (!this.babel) {
+    if (!this.options.babel) {
       return;
     }
-    this.copy('babelrc', '.babelrc');
+
+    this.fs.copy(
+      this.templatePath('babelrc'),
+      this.destinationPath('.babelrc')
+    );
   },
 
   mainStylesheet: function () {
@@ -305,30 +385,37 @@ module.exports = yeoman.generators.Base.extend({
     }
 
     var css = 'styles/main.' + (this.compass ? 's' : '') + 'css';
-    this.copy(css, 'app/' + css);
+
+    this.fs.copy(
+      this.templatePath(css),
+      this.destinationPath('app/' + css)
+    );
   },
 
   assets: function () {
-    this.template('_locales/en/messages.json', 'app/_locales/en/messages.json');
-    this.copy('images/icon-16.png', 'app/images/icon-16.png');
-    this.copy('images/icon-128.png', 'app/images/icon-128.png');
+    this.fs.copyTpl(
+      this.templatePath('_locales/en/messages.json'), 
+      this.destinationPath('app/_locales/en/messages.json'),
+      this.manifest
+    );
+
+    this.fs.copy(
+      this.templatePath('images/icon-16.png'),
+      this.destinationPath('app/images/icon-16.png')
+    );
+
+    this.fs.copy(
+      this.templatePath('images/icon-128.png'),
+      this.destinationPath('app/images/icon-128.png')
+    );
   },
 
   install: function () {
-    this.on('end', function () {
-      this.invoke(this.options['test-framework'], {
-        options: {
-          'skip-message': this.options['skip-install-message'],
-          'skip-install': this.options['skip-install']
-        }
+    if (!this.options['skip-install']) {
+      this.installDependencies({
+        skipMessage: this.options['skip-install-message'],
+        skipInstall: this.options['skip-install']
       });
-
-      if (!this.options['skip-install']) {
-        this.installDependencies({
-          skipMessage: this.options['skip-install-message'],
-          skipInstall: this.options['skip-install']
-        });
-      }
-    });
+    }
   }
 });

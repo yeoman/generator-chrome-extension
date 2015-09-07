@@ -13,5 +13,5 @@
       "scripts/chromereload.js",
       "scripts/background.js"
     ]
-  }<%- manifest.items %>
+  }<%- items %>
 }

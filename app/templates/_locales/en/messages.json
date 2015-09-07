@@ -1,10 +1,10 @@
 {
   "appName": {
-    "message": "<%= manifest.name %>",
+    "message": "<%= name %>",
     "description": "The name of the application"
   },
   "appDescription": {
-    "message": "<%= manifest.description %>",
+    "message": "<%= description %>",
     "description": "The description of the application"
   }
 }
