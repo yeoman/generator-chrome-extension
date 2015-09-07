@@ -70,7 +70,7 @@ module.exports = yeoman.generators.Base.extend({
 
       dest = dest ? dest + '.js' : srcFile;
       this.fs.copy(
-        this.templatePath('scripts/' + srcFile), 
+        this.templatePath('scripts/' + srcFile),
         this.destinationPath('app/scripts/' + dest)
       );
     };
@@ -256,7 +256,12 @@ module.exports = yeoman.generators.Base.extend({
 
     // add options page field.
     if (this.manifest.options) {
+      var options_ui = {
+        page: 'options.html',
+        chrome_style: true
+      };
       manifest.options_page = '"options.html"';
+      manifest.options_ui = JSON.stringify(options_ui, null, 2).replace(/\n/g, '\n  ');
     }
 
     // add omnibox keyword field.
@@ -310,19 +315,19 @@ module.exports = yeoman.generators.Base.extend({
     if (this.manifest.action === 0) {
       return;
     }
-    
+
     this.fs.copy(
       this.templatePath('popup.html'),
       this.destinationPath('app/popup.html')
     );
-    
+
     this.copyjs('popup');
 
     this.fs.copy(
       this.templatePath('images/icon-19.png'),
       this.destinationPath('app/images/icon-19.png')
     );
-    
+
     this.fs.copy(
       this.templatePath('images/icon-38.png'),
       this.destinationPath('app/images/icon-38.png')
@@ -389,7 +394,7 @@ module.exports = yeoman.generators.Base.extend({
 
   assets: function () {
     this.fs.copyTpl(
-      this.templatePath('_locales/en/messages.json'), 
+      this.templatePath('_locales/en/messages.json'),
       this.destinationPath('app/_locales/en/messages.json'),
       this.manifest
     );

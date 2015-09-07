@@ -65,7 +65,7 @@ describe('Extension test', function () {
       done();
     });
   });
-  
+
   it('creates expected files with Options Page', function (done) {
     helper.run({}, {
       'uifeatures': ['options']
@@ -79,7 +79,8 @@ describe('Extension test', function () {
       assert.fileContent([
         ['bower.json', /"name": "temp"/],
         ['package.json', /"name": "temp"/],
-        ['app/manifest.json', /"options_page": "options.html"/]
+        ['app/manifest.json', /"options_page": "options.html"/],
+        ['app/manifest.json', /"options_ui": {\s+"page": "options.html",\s+"chrome_style": true\s+}/]
       ]);
       done();
     });
