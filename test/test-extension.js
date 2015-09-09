@@ -34,7 +34,7 @@ describe('Extension test', function () {
     }, function () {
       var expected = [
         'app/bower_components',
-        'app/scripts/popup.js',
+        'app/scripts.babel/popup.js',
         'app/popup.html'
       ];
 
@@ -53,7 +53,7 @@ describe('Extension test', function () {
     }, function () {
       var expected = [
         'app/bower_components',
-        'app/scripts/popup.js',
+        'app/scripts.babel/popup.js',
         'app/popup.html'
       ];
 
@@ -71,7 +71,7 @@ describe('Extension test', function () {
       'uifeatures': ['options']
     }, function () {
       var expected = [
-        'app/scripts/options.js',
+        'app/scripts.babel/options.js',
         'app/options.html'
       ];
 

@@ -41,6 +41,8 @@ module.exports = yeoman.generators.Base.extend({
     this.manifest = {
       permissions:{}
     };
+    
+    this.srcScript = 'app/scripts' + (this.options.babel ? '.babel/' : '/');
 
     if (this.options['test-framework'] === 'mocha') {
       testLocal = require.resolve('generator-mocha/generators/app/index.js');
@@ -56,22 +58,18 @@ module.exports = yeoman.generators.Base.extend({
       local: testLocal
     });
 
-    // copy es2015 or es5 source file
+    // copy source files to scripts or scripts.babel
     this.copyjs = function copyjs(src, dest) {
-      var srcFile = src + '.js';
-
-      if (this.options.babel) {
-        var es6File = path.join(__dirname, 'templates', 'scripts', src + '.es6');
-        if (fs.existsSync(es6File)) {
-          srcFile = src + '.es6';
-          dest = src;
-        }
+      if (!dest) {
+        dest = src;
       }
-
-      dest = dest ? dest + '.js' : srcFile;
-      this.fs.copy(
-        this.templatePath('scripts/' + srcFile),
-        this.destinationPath('app/scripts/' + dest)
+      
+      this.fs.copyTpl(
+        this.templatePath('scripts/' + src),
+        this.destinationPath(this.srcScript + dest),
+        {
+          babel: this.options.babel
+        }
       );
     };
   },
@@ -199,9 +197,12 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   git: function () {
-    this.fs.copy(
+    this.fs.copyTpl(
       this.templatePath('gitignore'),
-      this.destinationPath('.gitignore')
+      this.destinationPath('.gitignore'),
+      {
+        babel: this.options.babel
+      }
     );
 
     this.fs.copy(
@@ -321,7 +322,7 @@ module.exports = yeoman.generators.Base.extend({
       this.destinationPath('app/popup.html')
     );
 
-    this.copyjs('popup');
+    this.copyjs('popup.js');
 
     this.fs.copy(
       this.templatePath('images/icon-19.png'),
@@ -335,16 +336,16 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   eventpage: function () {
-    var backgroundjs = 'background';
+    var backgroundjs = 'background.js';
 
     if (this.manifest.action === 2) {
-      backgroundjs = 'background.pageaction';
+      backgroundjs = 'background.pageaction.js';
     } else if (this.manifest.action === 1) {
-      backgroundjs = 'background.browseraction';
+      backgroundjs = 'background.browseraction.js';
     }
 
-    this.copyjs(backgroundjs, 'background');
-    this.copyjs('chromereload');
+    this.copyjs(backgroundjs, 'background.js');
+    this.copyjs('chromereload.js');
   },
 
   options: function () {
@@ -357,7 +358,7 @@ module.exports = yeoman.generators.Base.extend({
       this.destinationPath('app/options.html')
     );
 
-    this.copyjs('options');
+    this.copyjs('options.js');
   },
 
   contentscript: function () {
@@ -365,7 +366,7 @@ module.exports = yeoman.generators.Base.extend({
       return;
     }
 
-    this.copyjs('contentscript');
+    this.copyjs('contentscript.js');
   },
 
   babel: function () {

@@ -20,7 +20,8 @@ module.exports = function (grunt) {
   // Configurable paths
   var config = {
     app: 'app',
-    dist: 'dist'
+    dist: 'dist',
+    srcScript: '<%%= config.app %>/scripts<% if (babel) { %>.babel<% } %>'
   };
 
   grunt.initConfig({
@@ -35,7 +36,7 @@ module.exports = function (grunt) {
         tasks: ['bowerInstall']
       },
       js: {
-        files: ['<%%= config.app %>/scripts/{,*/}*.js'],
+        files: ['<%%= config.srcScript %>/{,*/}*.js'],
         tasks: ['jshint', 'babel'],
         options: {
           livereload: '<%%= connect.options.livereload %>'
@@ -76,9 +77,9 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: '<%%= config.app %>/scripts',
+          cwd: '<%%= config.srcScript %>',
           src: '{,*/}*.js',
-          dest: '<%%= config.dist %>/scripts',
+          dest: '<%%= config.app %>/scripts',
           ext: '.js'
         }]
       }
@@ -134,7 +135,7 @@ module.exports = function (grunt) {
       },
       all: [
         'Gruntfile.js',
-        '<%%= config.app %>/scripts/{,*/}*.js',
+        '<%%= config.srcScript %>/{,*/}*.js',
         '!<%%= config.app %>/scripts/vendor/*',
         'test/spec/{,*/}*.js'
       ]
@@ -362,10 +363,10 @@ module.exports = function (grunt) {
 
   grunt.registerTask('debug', function () {
     grunt.task.run([
-      'jshint',
-      'concurrent:chrome',
-      'connect:chrome',<% if (babel) { %>
+      'jshint',<% if (babel) { %>
       'babel',<% } %>
+      'concurrent:chrome',
+      'connect:chrome',
       'watch'
     ]);
   });
@@ -377,9 +378,9 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('build', [
-    'clean:dist',
-    'chromeManifest:dist',<% if (babel) { %>
+    'clean:dist',<% if (babel) { %>
     'babel',<% } %>
+    'chromeManifest:dist',
     'useminPrepare',
     'concurrent:dist',
     <% if (manifest.action === 0) { %>// No UI feature selected, cssmin task will be commented
