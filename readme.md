@@ -34,6 +34,14 @@ To test, go to: chrome://extensions, enable Developer mode and load app as an un
 
 ## Grunt tasks
 
+### Babel
+
+[babel](https://babeljs.io) is default option for chrome-extension  generator that means you can use es2015 now for developing the Chrome extensions and you need to execute `babel` task below to compile a source at `scripts.babel` to the source runnable on chrome extension as yet. 
+
+```bash
+grunt babel
+```
+
 ### Debug
 
 Debug task helps reduce your effors during development extensions. If the task detects your changes of source files, Livereload([chromereload.js](https://github.com/yeoman/generator-chrome-extension/blob/master/app/templates/scripts/chromereload.js)) reloads your extension. If you would like to know more about Livereload and preview of Yeoman? Please see [Getting started with Yeoman and generator-webapp](http://youtu.be/zBt2g9ekiug?t=3m51s) for your understanding.
@@ -54,9 +62,9 @@ grunt build
 
 ## Options
 
-* `--babel`
+* `--no-babel`
 
-  Use [Babel](https://babeljs.io/) ES2015 transpiler.
+  If you wouldn't use [Babel](https://babeljs.io/) ES2015 transpiler.
 
 * `--skip-install`
 
