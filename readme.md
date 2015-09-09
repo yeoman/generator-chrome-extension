@@ -32,15 +32,21 @@ yo chrome-extension
 
 To test, go to: chrome://extensions, enable Developer mode and load app as an unpacked extension.
 
-## Grunt tasks
+## ES2015
 
-### Babel
-
-[babel](https://babeljs.io) is default option for chrome-extension  generator that means you can use es2015 now for developing the Chrome extensions and you need to execute `babel` task below to compile a source at `scripts.babel` to the source runnable on chrome extension as yet. 
+ES2015 is default option in this generator that means you can use es2015 now for developing the Chrome extensions. However, at the moment, you need to execute `babel` task of grunt to compile to test and run the extension on Chrome, because [ES2015 is not full functionality on Chrome as yet](http://kangax.github.io/compat-table/es6/). a source written by es2015 is located at `scripts.babel` and runnable sources are will be created at `script` after compiling by grunt
 
 ```bash
 grunt babel
 ```
+
+If you would like to have a continuous compile by babel you can use `watch` task
+
+```bash
+grunt watch
+```
+
+## Grunt tasks
 
 ### Debug
 
