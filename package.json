@@ -15,7 +15,7 @@
     "test": "mocha --reporter spec"
   },
   "dependencies": {
-    "generator-jasmine": "^0.2.0",
+    "generator-jasmine": "^0.2.1",
     "generator-mocha": "^0.2.0",
     "mkdirp": "^0.5.1",
     "underscore.string": "^3.2.1",
@@ -24,7 +24,7 @@
   "devDependencies": {
     "mocha": "*",
     "object-assign": "^4.0.1",
-    "yeoman-assert": "^2.0.0"
+    "yeoman-assert": "^2.1.0"
   },
   "engines": {
     "node": ">=0.10.0"
