@@ -41,7 +41,7 @@ module.exports = yeoman.generators.Base.extend({
     this.manifest = {
       permissions:{}
     };
-    
+
     this.srcScript = 'app/scripts' + (this.options.babel ? '.babel/' : '/');
 
     if (this.options['test-framework'] === 'mocha') {
@@ -63,7 +63,7 @@ module.exports = yeoman.generators.Base.extend({
       if (!dest) {
         dest = src;
       }
-      
+
       this.fs.copyTpl(
         this.templatePath('scripts/' + src),
         this.destinationPath(this.srcScript + dest),
@@ -261,7 +261,6 @@ module.exports = yeoman.generators.Base.extend({
         page: 'options.html',
         chrome_style: true
       };
-      manifest.options_page = '"options.html"';
       manifest.options_ui = JSON.stringify(options_ui, null, 2).replace(/\n/g, '\n  ');
     }
 
