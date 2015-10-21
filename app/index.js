@@ -5,6 +5,7 @@ var spawn = require('child_process').spawn;
 var yeoman = require('yeoman-generator');
 var _s = require('underscore.string');
 var mkdirp = require('mkdirp');
+var chromeManifest = require('./chrome-manifest');
 
 module.exports = yeoman.generators.Base.extend({
   constructor: function (args, options, config) {
@@ -102,45 +103,13 @@ module.exports = yeoman.generators.Base.extend({
         type: 'checkbox',
         name: 'uifeatures',
         message: 'Would you like more UI Features?',
-        choices: [{
-          value: 'options',
-          name: 'Options Page',
-          checked: false
-        }, {
-          value: 'contentscript',
-          name: 'Content Scripts',
-          checked: false
-        }, {
-          value: 'omnibox',
-          name: 'Omnibox',
-          checked: false
-        }]
+        choices: chromeManifest.uifeatureChoices
       },
       {
         type: 'checkbox',
         name: 'permissions',
-        message: 'Would you like to use permissions?',
-        choices: [{
-          value: 'tabs',
-          name: 'Tabs',
-          checked: false
-        }, {
-          value: 'bookmark',
-          name: 'Bookmarks',
-          checked: false
-        }, {
-          value: 'cookie',
-          name: 'Cookies',
-          checked: false
-        }, {
-          value: 'history',
-          name: 'History',
-          checked: false
-        }, {
-          value: 'management',
-          name: 'Management',
-          checked: false
-        }]
+        message: 'Would you like to set permissions?',
+        choices: chromeManifest.permissionChoices
       }
     ];
 
