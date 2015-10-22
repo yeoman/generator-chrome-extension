@@ -120,15 +120,19 @@ module.exports = yeoman.generators.Base.extend({
       this.locale.description = answers.description;
 
       // prepare options
-      this.options.uiAction = answers.uiAction === 'No' ? 0 : (answers.uiAction === 'browserAction') ? 1 : 2;
+      this.options.manifest = {
+        fields: answers.uiFeatures,
+        permissions: answers.permissions
+      };
+
+      if (answers.uiAction !== 'No') {
+        this.options.manifest.fields = this.options.manifest.fields.concat([answers.uiAction]);
+        this.options.uiAction = /^browser/.test(answers.uiAction) ? 'browser_action' : 'page_action';
+      }
+
+      this.options.permissions = answers.permissions;
       this.options.optionsUI = isChecked(answers.uiFeatures, 'optionsUI');
       this.options.contentscript = isChecked(answers.uiFeatures, 'contentScripts');
-
-      // create manifest with basic field
-      this.manifest = chromeManifest.createManifest({
-        fields: ((this.options.uiAction > 0 ? [answers.uiAction] : [])).concat(answers.uiFeatures),
-        permissions: answers.permissions
-      });
 
       cb();
     }.bind(this));
@@ -146,7 +150,7 @@ module.exports = yeoman.generators.Base.extend({
       {
         name: this.appname,
         pkg: this.pkg,
-        uiAction: this.options.uiAction > 0,
+        uiAction: this.options.uiAction,
         babel: this.options.babel,
         testFramework: this.options['test-framework'],
         compass: this.options.compass
@@ -211,14 +215,15 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   manifest: function () {
-    // change title for popup
-    if (this.options.uiAction > 0) {
-      var uiAction = this.manifest[(this.options.uiAction === 1) ? 'browser_action' : 'page_action'];
-      uiAction.default_title = this.appname;
-      uiAction.default_popup = 'popup.html';
+    // create manifest with basic field
+    this.manifest = chromeManifest.createManifest(this.options.manifest);
+
+    // update title of popup
+    if (this.options.uiAction) {
+      this.manifest[this.options.uiAction].default_title = this.appname;
     }
 
-    // add omnibox keyword field.
+    // update keyword of omnibox
     if (this.options.omnibox) {
       this.manifest.omnibox.keyword = this.manifest.name;
     }
@@ -252,10 +257,8 @@ module.exports = yeoman.generators.Base.extend({
   eventpage: function () {
     var backgroundjs = 'background.js';
 
-    if (this.options.uiAction === 2) {
-      backgroundjs = 'background.pageaction.js';
-    } else if (this.options.uiAction === 1) {
-      backgroundjs = 'background.browseraction.js';
+    if (this.options.uiAction) {
+      backgroundjs = 'background.' + this.options.uiAction + '.js';
     }
 
     this.copyjs(backgroundjs, 'background.js');
