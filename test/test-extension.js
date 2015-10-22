@@ -116,6 +116,7 @@ describe('Extension test', function () {
         'bookmarks',
         'cookies',
         'history',
+        'management',
         'http://*/*',
         'https://*/*'
       ]
@@ -126,6 +127,7 @@ describe('Extension test', function () {
         ['app/manifest.json', /"bookmarks"/],
         ['app/manifest.json', /"cookies"/],
         ['app/manifest.json', /"history"/],
+        ['app/manifest.json', /"management"/],
         ['app/manifest.json', /\s+"http:\/\/\*\/\*",\s+"https:\/\/\*\/\*"/],
       ]);
       done();
