@@ -32,6 +32,12 @@ module.exports = yeoman.generators.Base.extend({
       defaults: false
     });
 
+    this.option('all-permissions', {
+      type: Boolean,
+      defaults: false,
+      desc: 'All of permissions will be shown'
+    });
+
     // load package
     this.pkg = require('../package.json');
 
@@ -106,7 +112,7 @@ module.exports = yeoman.generators.Base.extend({
         type: 'checkbox',
         name: 'permissions',
         message: 'Would you like to set permissions?',
-        choices: chromeManifest.permissionChoices
+        choices: chromeManifest.permissionChoices(this.options['all-permissions'])
       }
     ];
 

@@ -52,8 +52,17 @@ module.exports = {
   primaryPermissions: chromePrimaryPermissions,
   uiActions: chromeUIActions,
   uiFeatures: chromeUIFeatures,
-  permissionChoices: function () {
-    return getChoices(chromePrimaryPermissions);
+  permissionChoices: function (allOfPermissions) {
+    var permissions = chromePrimaryPermissions;
+
+    if (allOfPermissions) {
+      permissions = permissions.concat(Object.keys(Manifest.queryMetadata({
+        channel: 'stable',
+        extensionTypes: ['extension']
+      }).permissions));
+    }
+
+    return getChoices(permissions);
   },
   uiActionChoices: function () {
     return getChoices(chromeUIActions);

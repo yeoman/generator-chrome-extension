@@ -18,6 +18,7 @@ function testChoices(choices) {
 describe('Choices test', function () {
   it('generates the permision list of chrome extension', function (done) {
       testChoices(chromeManifest.permissionChoices());
+      testChoices(chromeManifest.permissionChoices(true));
       testChoices(chromeManifest.uiActionChoices());
       testChoices(chromeManifest.uiFeatureChoices());
 
@@ -26,7 +27,7 @@ describe('Choices test', function () {
 });
 
 describe('Manifest test', function () {
-  it('generates the permision list of chrome extension', function (done) {
+  it('generates the permision list of chrome primary', function (done) {
     var manifest = chromeManifest.createManifest({
       fields: chromeManifest.uiActions.slice(1).concat(chromeManifest.uiFeatures),
       permissions: chromeManifest.primaryPermissions
