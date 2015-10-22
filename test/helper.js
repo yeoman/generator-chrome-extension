@@ -12,9 +12,9 @@ module.exports = {
       .withPrompts(assign({
         'name': 'temp',
         'description': 'description',
-        'uifeatures': [],
+        'uiFeatures': [],
         'permissions': [],
-        'action': 'No'
+        'uiAction': 'No'
       }, prompts))
       .on('end', done);
   }

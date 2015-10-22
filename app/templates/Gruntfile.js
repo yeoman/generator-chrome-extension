@@ -383,7 +383,7 @@ module.exports = function (grunt) {
     'chromeManifest:dist',
     'useminPrepare',
     'concurrent:dist',
-    <% if (manifest.action === 0) { %>// No UI feature selected, cssmin task will be commented
+    <% if (!uiAction) { %>// No UI feature selected, cssmin task will be commented
     // <% } %>'cssmin',
     'concat',
     'uglify',

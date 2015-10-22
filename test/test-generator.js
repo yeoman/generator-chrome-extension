@@ -12,7 +12,7 @@ function pkgContainsDevDependencies(dependency) {
 describe('Generator test', function () {
   it('creates expected files with babel', function (done) {
     helper.run({}, {
-      'action': 'No'
+      'uiAction': 'No'
     }, function () {
       assert.file([
         '.editorconfig',
@@ -28,7 +28,7 @@ describe('Generator test', function () {
         'app/scripts.babel/background.js',
         'app/scripts.babel/chromereload.js',
       ]);
-        
+
       assert.fileContent([
         ['app/scripts.babel/background.js', /details =>/],
         ['app/scripts.babel/chromereload.js', /const\sLIVERELOAD_HOST\s=/],
@@ -36,16 +36,16 @@ describe('Generator test', function () {
         ['Gruntfile.js', /'babel',/],
         ['package.json', /grunt-babel/]
       ]);
-      
+
       done();
     });
   });
-  
+
   it('creates expected files with --no-babel', function (done) {
     helper.run({
       babel: false,
     }, {
-      'action': 'No'
+      'uiAction': 'No'
     }, function () {
       assert.file([
         '.editorconfig',
@@ -60,14 +60,14 @@ describe('Generator test', function () {
         'app/scripts/background.js',
         'app/scripts/chromereload.js',
       ]);
-      
+
       assert.noFile('.babelrc');
-      
+
       assert.noFileContent([
         ['app/scripts/chromereload.js', /const\sLIVERELOAD_HOST\s=/],
         ['package.json', /grunt-babel/]
       ]);
-      
+
       done();
     });
   });

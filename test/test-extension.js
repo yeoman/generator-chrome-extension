@@ -7,7 +7,7 @@ var helper = require('./helper');
 describe('Extension test', function () {
   it('creates expected files in no UI Action', function (done) {
     helper.run({}, {
-      'action': 'No'
+      'uiAction': 'No'
     }, function () {
       var expected = [
         'app/bower_components',
@@ -30,7 +30,7 @@ describe('Extension test', function () {
 
   it('creates expected files in Browser Action', function (done) {
     helper.run({}, {
-      'action': 'Browser'
+      'uiAction': 'browserAction'
     }, function () {
       var expected = [
         'app/bower_components',
@@ -49,7 +49,7 @@ describe('Extension test', function () {
 
   it('creates expected files in Page Action', function (done) {
     helper.run({}, {
-      'action': 'Page'
+      'uiAction': 'pageAction'
     }, function () {
       var expected = [
         'app/bower_components',
@@ -68,7 +68,7 @@ describe('Extension test', function () {
 
   it('creates expected files with Options Page', function (done) {
     helper.run({}, {
-      'uifeatures': ['options']
+      'uiFeatures': ['optionsUI']
     }, function () {
       var expected = [
         'app/scripts.babel/options.js',
@@ -87,10 +87,10 @@ describe('Extension test', function () {
 
   it('creates manifest.json with Omnibox option', function (done) {
     helper.run({}, {
-      'uifeatures': ['omnibox']
+      'uiFeatures': ['omnibox']
     }, function () {
       assert.fileContent([
-        ['app/manifest.json', /"omnibox": {\s+"keyword": "temp"\s+}/]
+        ['app/manifest.json', /"omnibox": {\s+"keyword": "OMNIBOX-KEYWORD"\s+}/]
       ]);
       done();
     });
@@ -98,7 +98,7 @@ describe('Extension test', function () {
 
   it('creates expected files with Content-script option', function (done) {
     helper.run({}, {
-      'uifeatures': ['contentscript']
+      'uiFeatures': ['contentScripts']
     }, function () {
       assert.fileContent([
         ['app/manifest.json', /"content_scripts": \[\s+{\s+"matches": \[\s+"http:\/\/\*\/\*",\s+"https:\/\/\*\/\*"\s+\],\s+"js": \[\s+"scripts\/contentscript.js"\s+\],\s+"run_at": "document_end",\s+"all_frames": false/],
