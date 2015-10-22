@@ -5,6 +5,12 @@ var spawn = require('child_process').spawn;
 var yeoman = require('yeoman-generator');
 var _s = require('underscore.string');
 var mkdirp = require('mkdirp');
+var Manifest = require('chrome-manifest');
+
+var metadata = new Manifest.queryMetadata({
+  channel: 'stable',
+  extensionTypes: ['extension']
+});
 
 module.exports = yeoman.generators.Base.extend({
   constructor: function (args, options, config) {
@@ -41,7 +47,7 @@ module.exports = yeoman.generators.Base.extend({
     this.manifest = {
       permissions:{}
     };
-    
+
     this.srcScript = 'app/scripts' + (this.options.babel ? '.babel/' : '/');
 
     if (this.options['test-framework'] === 'mocha') {
@@ -63,7 +69,7 @@ module.exports = yeoman.generators.Base.extend({
       if (!dest) {
         dest = src;
       }
-      
+
       this.fs.copyTpl(
         this.templatePath('scripts/' + src),
         this.destinationPath(this.srcScript + dest),
@@ -120,27 +126,13 @@ module.exports = yeoman.generators.Base.extend({
         type: 'checkbox',
         name: 'permissions',
         message: 'Would you like to use permissions?',
-        choices: [{
-          value: 'tabs',
-          name: 'Tabs',
-          checked: false
-        }, {
-          value: 'bookmark',
-          name: 'Bookmarks',
-          checked: false
-        }, {
-          value: 'cookie',
-          name: 'Cookies',
-          checked: false
-        }, {
-          value: 'history',
-          name: 'History',
-          checked: false
-        }, {
-          value: 'management',
-          name: 'Management',
-          checked: false
-        }]
+        choices: Object.keys(metadata.permissions).map(function(permission) {
+          return {
+            value: permission,
+            name: permission,
+            checked: false
+          };
+        })
       }
     ];
 
@@ -153,11 +145,10 @@ module.exports = yeoman.generators.Base.extend({
       this.manifest.options = isChecked(answers.uifeatures, 'options');
       this.manifest.omnibox = isChecked(answers.uifeatures, 'omnibox');
       this.manifest.contentscript = isChecked(answers.uifeatures, 'contentscript');
-      this.manifest.permissions.tabs = isChecked(answers.permissions, 'tabs');
-      this.manifest.permissions.bookmarks = isChecked(answers.permissions, 'bookmarks');
-      this.manifest.permissions.cookies = isChecked(answers.permissions, 'cookies');
-      this.manifest.permissions.history = isChecked(answers.permissions, 'history');
-      this.manifest.permissions.management = isChecked(answers.permissions, 'management');
+      this.manifest.permissions = answers.permissions.reduce(function(result, permission) {
+        result[permission] = true;
+        return result;
+      }, {});
 
       cb();
     }.bind(this));

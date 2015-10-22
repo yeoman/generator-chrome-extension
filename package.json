@@ -15,6 +15,7 @@
     "test": "mocha --reporter spec"
   },
   "dependencies": {
+    "chrome-manifest": "^0.2.5",
     "generator-jasmine": "^0.2.1",
     "generator-mocha": "^0.2.0",
     "mkdirp": "^0.5.1",
