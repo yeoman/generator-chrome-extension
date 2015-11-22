@@ -234,6 +234,13 @@ module.exports = yeoman.generators.Base.extend({
       this.manifest.omnibox.keyword = this.manifest.name;
     }
 
+    if (this.options.babel) {
+      this.manifest.background.scripts = [
+        "scripts.babel/chromereload.js",
+        "scripts.babel/background.js"
+      ];
+    }
+
     this.fs.writeJSON(this.destinationPath('app/manifest.json'), this.manifest);
   },
 
