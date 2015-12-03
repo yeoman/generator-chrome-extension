@@ -26,8 +26,8 @@ module.exports = yeoman.generators.Base.extend({
       desc: 'Compile ES2015 using Babel'
     });
 
-    this.option('compass', {
-      desc: 'Use Compass',
+    this.option('sass', {
+      desc: 'Use Sass',
       type: Boolean,
       defaults: false
     });
@@ -149,17 +149,18 @@ module.exports = yeoman.generators.Base.extend({
     mkdirp('app/bower_components');
   },
 
-  gruntfile: function () {
+  gulpfile: function () {
     this.fs.copyTpl(
-      this.templatePath('Gruntfile.js'),
-      this.destinationPath('Gruntfile.js'),
+      this.templatePath('gulpfile.babel.js'),
+      this.destinationPath('gulpfile.babel.js'),
       {
-        name: this.appname,
+        date: (new Date).toISOString().split('T')[0],
+        appname: this.appname,
         pkg: this.pkg,
         uiAction: this.options.uiAction,
         babel: this.options.babel,
+        sass: this.options.sass,
         testFramework: this.options['test-framework'],
-        compass: this.options.compass
       }
     );
   },
@@ -169,10 +170,10 @@ module.exports = yeoman.generators.Base.extend({
       this.templatePath('_package.json'),
       this.destinationPath('package.json'),
       {
-        name: _s.slugify(this.appname),
+        appname: _s.slugify(this.appname),
         babel: this.options.babel,
+        sass: this.options.sass,
         testFramework: this.options['test-framework'],
-        compass: this.options.compass
       }
     );
   },
@@ -182,7 +183,8 @@ module.exports = yeoman.generators.Base.extend({
       this.templatePath('gitignore'),
       this.destinationPath('.gitignore'),
       {
-        babel: this.options.babel
+        babel: this.options.babel,
+        sass: this.options.sass
       }
     );
 
@@ -308,11 +310,12 @@ module.exports = yeoman.generators.Base.extend({
       return;
     }
 
-    var css = 'styles/main.' + (this.compass ? 's' : '') + 'css';
+    var cssPath = 'styles' + (this.options.sass ? '.scss' : '');
+    var cssFile = 'main.' + (this.options.sass ? 's' : '') + 'css';
 
     this.fs.copy(
-      this.templatePath(css),
-      this.destinationPath('app/' + css)
+      this.templatePath(path.join('styles', cssFile)),
+      this.destinationPath(path.join('app', cssPath, cssFile))
     );
   },
 

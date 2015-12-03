@@ -11,7 +11,6 @@ describe('Extension test', function () {
     }, function () {
       var expected = [
         'app/bower_components',
-        'Gruntfile.js',
         'app/manifest.json',
         'app/_locales/en/messages.json',
         'app/images/icon-128.png',
@@ -22,7 +21,6 @@ describe('Extension test', function () {
       assert.fileContent([
         ['bower.json', /"name": "temp"/],
         ['package.json', /"name": "temp"/],
-        ['Gruntfile.js', /\/\/ No UI feature selected, cssmin task will be commented\n\s+\/\/ 'cssmin'/]
       ]);
       done();
     });
