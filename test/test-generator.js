@@ -10,7 +10,7 @@ function pkgContainsDevDependencies(dependency) {
 }
 
 describe('Generator test', function () {
-  it('creates expected files with babel', function (done) {
+  it('creates configuration files', function (done) {
     helper.run({}, {
       'uiAction': 'No'
     }, function () {
@@ -21,9 +21,25 @@ describe('Generator test', function () {
         '.babelrc',
         '.gitignore',
         '.gitattributes',
+        'gulpfile.babel.js',
         'package.json',
         'bower.json',
-        'Gruntfile.js',
+      ]);
+
+      assert.fileContent([
+        ['gulpfile.babel.js', /import gulp/],
+        ['package.json', /babel-core/]
+      ]);
+
+      done();
+    });
+  });
+
+  it('creates expected files with babel', function (done) {
+    helper.run({}, {
+      'uiAction': 'No'
+    }, function () {
+      assert.file([
         'app/manifest.json',
         'app/scripts.babel/background.js',
         'app/scripts.babel/chromereload.js',
@@ -32,9 +48,7 @@ describe('Generator test', function () {
       assert.fileContent([
         ['app/scripts.babel/background.js', /details =>/],
         ['app/scripts.babel/chromereload.js', /const\sLIVERELOAD_HOST\s=/],
-        ['Gruntfile.js', /srcScript: '<%= config.app %>\/scripts.babel'/],
-        ['Gruntfile.js', /'babel',/],
-        ['package.json', /grunt-babel/]
+        ['gulpfile.babel.js', /gulp.task\('babel'/],
       ]);
 
       done();
@@ -43,29 +57,45 @@ describe('Generator test', function () {
 
   it('creates expected files with --no-babel', function (done) {
     helper.run({
-      babel: false,
+      babel: false
     }, {
       'uiAction': 'No'
     }, function () {
       assert.file([
-        '.editorconfig',
-        '.jshintrc',
-        '.bowerrc',
-        '.gitignore',
-        '.gitattributes',
-        'package.json',
-        'bower.json',
-        'Gruntfile.js',
-        'app/manifest.json',
         'app/scripts/background.js',
         'app/scripts/chromereload.js',
       ]);
 
-      assert.noFile('.babelrc');
+      assert.noFile([
+        '.babelrc',
+        'app/scripts.babel/background.js',
+        'app/scripts.babel/chromereload.js'
+      ]);
 
-      assert.noFileContent([
-        ['app/scripts/chromereload.js', /const\sLIVERELOAD_HOST\s=/],
-        ['package.json', /grunt-babel/]
+      assert.fileContent([
+        ['app/scripts/background.js', /function \(details\)/],
+        ['app/scripts/chromereload.js', /var\sLIVERELOAD_HOST\s=/],
+      ]);
+
+      done();
+    });
+  });
+
+  it('creates expected files with sass', function (done) {
+    helper.run({
+      sass: true
+    }, {
+      'uiAction': 'browserAction'
+    }, function () {
+      assert.file([
+        'app/styles.scss/main.scss',
+      ]);
+
+      assert.fileContent([
+        ['app/scripts.babel/background.js', /details =>/],
+        ['app/scripts.babel/chromereload.js', /const\sLIVERELOAD_HOST\s=/],
+        ['gulpfile.babel.js', /gulp.task\('styles'/],
+        ['gulpfile.babel.js', /'babel',/]
       ]);
 
       done();
