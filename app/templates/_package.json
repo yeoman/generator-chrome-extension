@@ -30,9 +30,6 @@
     "run-sequence": "^1.1.4",
     "wiredep": "^2.2.2"
   },
-  "scripts": {<% if (babel) { %>
-    "postinstall": "gulp babel"<% } %>
-  },
   "eslintConfig": {
     "env": {
       "node": true,
