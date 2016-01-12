@@ -7,11 +7,11 @@ var _s = require('underscore.string');
 var mkdirp = require('mkdirp');
 var chromeManifest = require('./chrome-manifest');
 
-module.exports = yeoman.generators.Base.extend({
+module.exports = yeoman.Base.extend({
   constructor: function (args, options, config) {
     var testLocal;
 
-    yeoman.generators.Base.apply(this, arguments);
+    yeoman.Base.apply(this, arguments);
 
     // preapre options
     this.option('test-framework', {
