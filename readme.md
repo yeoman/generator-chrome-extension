@@ -6,10 +6,32 @@ Maintainer: [Jimmy Moon](https://github.com/ragingwind)
 
 ## Getting Started
 
-- Please make sure that `yo`, `gulp` and `bower` was installed on your system using this command: `npm install --global yo gulp bower`
-- Install the generator: `npm install -g generator-chrome-extension`
-- Make a new directory, and `cd` into it: `mkdir my-new-chrome-extension && cd $_`
-- Run: `yo chrome-extension`, optionally passing an extension name: yo chrome-extension [extension-name]
+```sh
+# Please make sure that `yo`, `gulp` and `bower` was installed on your system using this command:
+npm install --global yo gulp bower
+
+# Install the generator:
+npm install -g generator-chrome-extension
+
+# Make a new directory, and `cd` get into it:
+mkdir my-new-chrome-extension && cd $_
+
+# Generate a new project
+yo chrome-extension
+
+# Transform updated source written by ES2015 (default option)
+gulp babel
+
+# or Using watch to update source continuously
+gulp watch
+
+# Make a production version extensin
+gulp build
+```
+
+## Test Chrome Extension
+
+To test, go to: chrome://extensions, enable Developer mode and load app as an unpacked extension.
 
 Need more information about Chrome Extension? Please visit [Google Chrome Extension Development](http://developer.chrome.com/extensions/devguide.html)
 
@@ -27,29 +49,17 @@ Sets up a new Chrome Extension, generating all the boilerplate you need to get s
 yo chrome-extension
 ```
 
-## Test Chrome Extension
+## gulp tasks
 
-To test, go to: chrome://extensions, enable Developer mode and load app as an unpacked extension.
+### Babel
 
-## ES2015
+The generator supports ES 2015 syntax through babel transforming. You may have a source files in `script.babel` if your project has been generated without `--no-babel` options. While developing, When those of source has been changed, `gulp babel` should be run before test and run a extension on Chrome.
 
-ES2015 is the default option in the generator that means you can use es2015 now for developing the Chrome extensions. However, at this moment, you need to execute `babel` task of gulp to compile to test and run your extension on Chrome, because [ES2015 is not full functionality on Chrome as yet](http://kangax.github.io/compat-table/es6/). sources written by es2015 is located at `scripts.babel` and runnable sources are will be created at `script` after compiling by gulp.
-
-## Sass
-
-This generator supports `sass` through `--sass` options and generate `scss` boilerplate files at `styles.scss` that those of `scss` files will be compiled to `styles` via `gulp style` task. To do this, `libsass` is featured in the generator. Please see [this](https://github.com/yeoman/generator-gulp-webapp#libsass) for further information.
-
-```bash
+```sh
 gulp babel
 ```
 
-If you would like to have a continuous compile by babel you can use `watch` task
-
-```bash
-gulp watch
-```
-
-## gulp tasks
+If you would like to have a continuous transforming by babel you can use `watch` task
 
 ### Watch
 
@@ -92,6 +102,32 @@ gulp build
 * `--all-permissions`
 
   All of permissions of chrome extension will be shown.
+
+### ES2015 and babel
+
+ES2015 is the `default option` in the generator that means you can use es2015 now for developing the Chrome extensions. However, at this moment, you need to execute `babel` task of gulp to compile to test and run your extension on Chrome, because [ES2015 is not full functionality on Chrome as yet](http://kangax.github.io/compat-table/es6/).
+
+The sources written by es2015 is located at `scripts.babel` and runnable sources are will be at `script` after compiling by `gulp babel`. May you don't want to use babel and ES2015 use `--no-babel` option when scaffolding a new project.
+
+```sh
+yo chrome-extension --no-babel
+```
+
+### Sass
+
+This generator supports `sass` through `--sass` options and generate `scss` boilerplate files at `styles.scss` that those of `scss` files will be compiled to `styles` via `gulp style` task. To do this, `libsass` is featured in the generator. Please see [this](https://github.com/yeoman/generator-gulp-webapp#libsass) for further information.
+
+```sh
+yo chrome-extension --sass
+```
+
+### All of Permissions for Chrome Extension
+
+Need to add more permissions for chrome extension? You can get all list of permissions using `--all-permissions` option when scaffolding a new project.
+
+```sh
+yo chrome-extension --all-permissions
+```
 
 ## Contribute
 
