@@ -1,5 +1,5 @@
 var path = require('path');
-var helpers = require('yeoman-generator').test;
+var helpers = require('yeoman-test');
 var assign = require('object-assign');
 
 module.exports = {
