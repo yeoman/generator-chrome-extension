@@ -12,7 +12,7 @@
   "main": "app/index.js",
   "repository": "yeoman/generator-chrome-extension",
   "scripts": {
-    "test": "mocha --reporter spec --timeout 3000"
+    "test": "mocha --reporter spec --timeout 5000"
   },
   "dependencies": {
     "chrome-manifest": "^0.2.7",
