@@ -205,16 +205,6 @@ module.exports = yeoman.Base.extend({
     );
   },
 
-  jshint: function () {
-    this.fs.copyTpl(
-      this.templatePath('jshintrc'),
-      this.destinationPath('.jshintrc'),
-      {
-        testFramework: this.options['test-framework']
-      }
-    );
-  },
-
   editorConfig: function () {
     this.fs.copy(
       this.templatePath('editorconfig'),
