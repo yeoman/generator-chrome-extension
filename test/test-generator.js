@@ -16,7 +16,6 @@ describe('Generator test', function () {
     }, function () {
       assert.file([
         '.editorconfig',
-        '.jshintrc',
         '.bowerrc',
         '.babelrc',
         '.gitignore',
