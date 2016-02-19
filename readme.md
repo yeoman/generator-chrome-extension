@@ -25,7 +25,7 @@ gulp babel
 # or Using watch to update source continuously
 gulp watch
 
-# Make a production version extensin
+# Make a production version extension
 gulp build
 ```
 
