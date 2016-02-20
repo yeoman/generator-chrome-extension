@@ -62,16 +62,12 @@ gulp.task('styles', () => {
 });<% } %>
 
 gulp.task('html', <% if (sass) { %>['styles'],<% } %> () => {
-  const assets = $.useref.assets({searchPath: ['.tmp', 'app', '.']});
-
   return gulp.src('app/*.html')
-    .pipe(assets)
     .pipe($.sourcemaps.init())
     .pipe($.if('*.js', $.uglify()))
     .pipe($.if('*.css', $.minifyCss({compatibility: '*'})))
     .pipe($.sourcemaps.write())
-    .pipe(assets.restore())
-    .pipe($.useref())
+    .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
     .pipe($.if('*.html', $.minifyHtml({conditionals: true, loose: true})))
     .pipe(gulp.dest('dist'));
 });
