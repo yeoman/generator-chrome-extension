@@ -66,7 +66,6 @@ describe('Generator test', function () {
       ]);
 
       assert.noFile([
-        '.babelrc',
         'app/scripts.babel/background.js',
         'app/scripts.babel/chromereload.js'
       ]);

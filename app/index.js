@@ -285,10 +285,6 @@ module.exports = yeoman.Base.extend({
   },
 
   babel: function () {
-    if (!this.options.babel) {
-      return;
-    }
-
     this.fs.copy(
       this.templatePath('babelrc'),
       this.destinationPath('.babelrc')
