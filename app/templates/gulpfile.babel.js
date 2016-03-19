@@ -63,11 +63,11 @@ gulp.task('styles', () => {
 
 gulp.task('html', <% if (sass) { %>['styles'],<% } %> () => {
   return gulp.src('app/*.html')
+    .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
     .pipe($.sourcemaps.init())
     .pipe($.if('*.js', $.uglify()))
     .pipe($.if('*.css', $.minifyCss({compatibility: '*'})))
     .pipe($.sourcemaps.write())
-    .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
     .pipe($.if('*.html', $.minifyHtml({conditionals: true, loose: true})))
     .pipe(gulp.dest('dist'));
 });
