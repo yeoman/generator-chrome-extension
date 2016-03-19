@@ -65,7 +65,7 @@ gulp.task('html', <% if (sass) { %>['styles'],<% } %> () => {
   return gulp.src('app/*.html')
     .pipe($.sourcemaps.init())
     .pipe($.if('*.js', $.uglify()))
-    .pipe($.if('*.css', $.minifyCss({compatibility: '*'})))
+    .pipe($.if('*.css', $.cleanCss({compatibility: '*'})))
     .pipe($.sourcemaps.write())
     .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
     .pipe($.if('*.html', $.minifyHtml({conditionals: true, loose: true})))
@@ -83,7 +83,7 @@ gulp.task('chromeManifest', () => {
         ]
       }
   }))
-  .pipe($.if('*.css', $.minifyCss({compatibility: '*'})))
+  .pipe($.if('*.css', $.cleanCss({compatibility: '*'})))
   .pipe($.if('*.js', $.sourcemaps.init()))
   .pipe($.if('*.js', $.uglify()))
   .pipe($.if('*.js', $.sourcemaps.write('.')))

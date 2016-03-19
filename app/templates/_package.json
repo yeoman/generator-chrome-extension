@@ -12,12 +12,12 @@
     "gulp-babel": "^6.1.2",<% } %>
     "gulp-cache": "^0.4.2",
     "gulp-chrome-manifest": "0.0.13",
+    "gulp-clean-css": "^2.0.3",
     "gulp-eslint": "^2.0.0",
     "gulp-if": "^2.0.0",
     "gulp-imagemin": "^2.4.0",
     "gulp-livereload": "^3.8.1",
     "gulp-load-plugins": "^1.2.0",
-    "gulp-minify-css": "^1.2.3",
     "gulp-minify-html": "^1.0.5",<% if (sass) { %>
     "gulp-plumber": "^1.1.0",
     "gulp-sass": "^2.2.0",<% } %>
