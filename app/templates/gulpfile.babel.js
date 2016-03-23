@@ -68,7 +68,7 @@ gulp.task('html', <% if (sass) { %>['styles'],<% } %> () => {
     .pipe($.if('*.js', $.uglify()))
     .pipe($.if('*.css', $.cleanCss({compatibility: '*'})))
     .pipe($.sourcemaps.write())
-    .pipe($.if('*.html', $.minifyHtml({conditionals: true, loose: true})))
+    .pipe($.if('*.html', $.htmlmin({removeComments: true, collapseWhitespace: true})))
     .pipe(gulp.dest('dist'));
 });
 
