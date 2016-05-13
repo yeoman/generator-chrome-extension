@@ -69,14 +69,18 @@ Watch task helps you reduce your efforts during development extensions. If the t
 gulp watch
 ```
 
-### Build
+### Build and Package
 
-By default, generators compress the file that was created by building a js/css/html/resource file. You can distribute the compressed file using the Chrome Developer Dashboard to publish to the Chrome Web Store.
-
-Run this command to build your Chrome Extension project.
+It will build your app as a result you can have a distribution version of the app in `dist`. Run this command to build your Chrome Extension app.
 
 ```bash
 gulp build
+```
+
+You can also distribute your project with compressed file using the Chrome Developer Dashboard at Chrome Web Store. This command will compress your app built by `gulp build` command.
+
+```bash
+gulp package
 ```
 
 ## Options
@@ -136,3 +140,4 @@ See the [contributing docs](https://github.com/yeoman/yeoman/blob/master/contrib
 ## License
 
 [BSD license](http://opensource.org/licenses/bsd-license.php)
+
