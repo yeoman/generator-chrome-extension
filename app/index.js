@@ -13,7 +13,7 @@ module.exports = yeoman.Base.extend({
 
     yeoman.Base.apply(this, arguments);
 
-    // preapre options
+    // prepare options
     this.option('test-framework', {
       desc: 'Test framework to be invoked',
       type: String,
