@@ -34,6 +34,7 @@ connection.onmessage = function (e) {
     var data = JSON.parse(e.data);
     if (data && data.command === 'reload') {
       chrome.runtime.reload();
+      chrome.developerPrivate.reload(chrome.runtime.id, {failQuietly: true});
     }
   }
 };
