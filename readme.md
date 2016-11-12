@@ -8,7 +8,7 @@ Maintainer: [Jimmy Moon](https://github.com/ragingwind)
 
 ```sh
 # Please make sure that `yo`, `gulp` and `bower` was installed on your system using this command:
-npm install --global yo gulp bower
+npm install --global yo gulp-cli bower
 
 # Install the generator:
 npm install -g generator-chrome-extension
