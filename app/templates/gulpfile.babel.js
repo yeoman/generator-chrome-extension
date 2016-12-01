@@ -105,7 +105,7 @@ gulp.task('babel', () => {
 <% } %>
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
-gulp.task('watch', ['lint'<% if (babel) { %>, 'babel'<% } %>], () => {
+gulp.task('watch', ['lint'<% if (babel) { %>, 'babel'<% } %><% if (sass) { %>, 'styles'<% } %>], () => {
   $.livereload.listen();
 
   gulp.watch([
