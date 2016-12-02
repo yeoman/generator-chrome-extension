@@ -8,8 +8,10 @@ Follow this recipe to configure Browserify.
 
 1. Install dependencies
 
-    npm run --save-dev babelify browserify vinyl-source-stream
-    
+```
+npm install --save-dev babelify browserify vinyl-source-stream
+```
+
 2. Configure ESLint by adding the following block under `eslintConfig` in `package.json`.
 
 ```
