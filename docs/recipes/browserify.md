@@ -37,20 +37,20 @@ import es from 'event-stream';
 
 ```js
 gulp.task('babel', () => {
-  let files = [
+  const files = [
     'background.js',
     'chromereload.js'
   ];
 
-  let tasks = files.map( file => {
-      return browserify({
-        entries: './app/scripts.babel/' + file,
-        debug: true
-      }).transform('babelify', { presets: ['es2015'] })
-        .bundle()
-        .pipe(source(file))
-        .pipe(gulp.dest('app/scripts'));
-  });
+  const tasks = files.map(file => (
+    browserify({
+      entries: `./app/scripts.babel/${file}`,
+      debug: true
+    }).transform('babelify', { presets: ['es2015'] })
+      .bundle()
+      .pipe(source(file))
+      .pipe(gulp.dest('app/scripts'))
+  ));
 
   return es.merge.apply(null, tasks);
 });
