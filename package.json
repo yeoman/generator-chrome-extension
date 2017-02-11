@@ -21,7 +21,7 @@
     "headerize": "^0.1.1",
     "mkdirp": "^0.5.1",
     "underscore.string": "^3.2.1",
-    "yeoman-generator": "^0.24.1"
+    "yeoman-generator": "^1.1.0"
   },
   "devDependencies": {
     "mocha": "*",
