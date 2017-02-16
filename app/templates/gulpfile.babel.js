@@ -97,6 +97,7 @@ gulp.task('chromeManifest', () => {
 <% if (babel) { %>
 gulp.task('babel', () => {
   return gulp.src('app/scripts.babel/**/*.js')
+      .pipe($.plumber())
       .pipe($.babel({
         presets: ['es2015']
       }))
