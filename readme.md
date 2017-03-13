@@ -69,6 +69,10 @@ Watch task helps you reduce your efforts during development extensions. If the t
 gulp watch
 ```
 
+You need to load/reload extension after starting `gulp watch` for Live-reload to work. 
+
+For content scripts you need to refresh pages where it is used.
+
 ### Build and Package
 
 It will build your app as a result you can have a distribution version of the app in `dist`. Run this command to build your Chrome Extension app.
