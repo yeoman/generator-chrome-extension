@@ -69,7 +69,9 @@ Watch task helps you reduce your efforts during development extensions. If the t
 gulp watch
 ```
 
-In order for Live-reload to work, reload extension manually after starting `gulp watch`.
+You need to load/reload extension after starting `gulp watch` for Live-reload to work. 
+
+For content scripts you need to refresh pages where it is used.
 
 ### Build and Package
 
