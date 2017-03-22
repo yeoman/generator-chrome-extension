@@ -1,10 +1,34 @@
+# System Files
+.DS_Store
+Thumbs.db
+
+# dependencies
 node_modules
+app/bower_components
+test/bower_components
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# other stuff
+.sass-cache
+npm-debug.log
 temp
 .tmp
 dist
-.sass-cache
-app/bower_components
-test/bower_components
 package
 <% if (babel) { %>app/scripts<% } %>
 <% if (sass) { %>app/styles<% } %>
