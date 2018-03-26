@@ -1,6 +1,6 @@
 {
   "name": "generator-chrome-extension",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Scaffold out a Chrome extension",
   "keywords": [
     "yeoman-generator",
