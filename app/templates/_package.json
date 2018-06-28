@@ -32,6 +32,9 @@
   },
   "eslintConfig": {
     "env": {
+      <% if (babel) { %>
+      "es6": true,
+      <% } %>
       "node": true,
       "browser": true
     },
