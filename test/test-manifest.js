@@ -39,7 +39,8 @@ describe('Manifest test', function () {
     assert.equal(manifest.description, '__MSG_appDescription__');
     assert.equal(manifest.icons['16'], 'images/icon-16.png');
     assert.equal(manifest.default_locale, 'en');
-    assert.equal(manifest.background.scripts[0], 'scripts/chromereload.js');
+    assert.equal(manifest.background.scripts[0], 'libs/polyfill.min.js');
+    assert.equal(manifest.background.scripts[1], 'scripts/chromereload.js');
     assert.equal(manifest.permissions.length, 21);
     assert.ok(manifest.browser_action);
     assert.ok(manifest.page_action);

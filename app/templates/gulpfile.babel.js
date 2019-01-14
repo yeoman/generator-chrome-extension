@@ -99,7 +99,7 @@ gulp.task('babel', () => {
   return gulp.src('app/scripts.babel/**/*.js')
       .pipe($.plumber())
       .pipe($.babel({
-        presets: ['es2015']
+        presets: ['@babel/env']
       }))
       .pipe(gulp.dest('app/scripts'));
 });

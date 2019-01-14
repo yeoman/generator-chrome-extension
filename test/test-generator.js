@@ -27,7 +27,7 @@ describe('Generator test', function () {
 
       assert.fileContent([
         ['gulpfile.babel.js', /import gulp/],
-        ['package.json', /babel-core/]
+        ['package.json', /@babel\/core/]
       ]);
 
       done();
@@ -42,12 +42,14 @@ describe('Generator test', function () {
         'app/manifest.json',
         'app/scripts.babel/background.js',
         'app/scripts.babel/chromereload.js',
+        'app/libs/polyfill.min.js',
       ]);
 
       assert.fileContent([
         ['app/scripts.babel/background.js', /details =>/],
         ['app/scripts.babel/chromereload.js', /const\sLIVERELOAD_HOST\s=/],
         ['gulpfile.babel.js', /gulp.task\('babel'/],
+        ['app/libs/polyfill.min.js', /@babel\/polyfill/],
       ]);
 
       done();
