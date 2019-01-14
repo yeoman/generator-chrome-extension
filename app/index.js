@@ -23,7 +23,7 @@ module.exports = yeoman.Base.extend({
     this.option('babel', {
       type: Boolean,
       defaults: true,
-      desc: 'Compile ES2015 using Babel'
+      desc: 'Compile ES2015+ using Babel'
     });
 
     this.option('sass', {
@@ -51,6 +51,7 @@ module.exports = yeoman.Base.extend({
     };
 
     this.srcScript = 'app/scripts' + (this.options.babel ? '.babel/' : '/');
+    this.libScript = 'app/libs/';
 
     if (this.options['test-framework'] === 'mocha') {
       testLocal = require.resolve('generator-mocha/generators/app/index.js');
@@ -288,6 +289,11 @@ module.exports = yeoman.Base.extend({
     this.fs.copy(
       this.templatePath('babelrc'),
       this.destinationPath('.babelrc')
+    );
+
+    this.fs.copy(
+      this.templatePath('../../node_modules/@babel/polyfill/dist/polyfill.min.js'),
+      this.libScript + 'polyfill.min.js'
     );
   },
 

@@ -83,6 +83,7 @@ module.exports = {
       'default_locale': 'en',
       'background': {
         'scripts': [
+          'libs/polyfill.min.js',
           'scripts/chromereload.js',
           'scripts/background.js'
         ]

@@ -15,6 +15,7 @@
     "test": "mocha --reporter spec --timeout 5000"
   },
   "dependencies": {
+    "@babel/polyfill": "^7.2.5",
     "chrome-manifest": "^0.2.9",
     "generator-jasmine": "^0.2.2",
     "generator-mocha": "^0.3.1",
