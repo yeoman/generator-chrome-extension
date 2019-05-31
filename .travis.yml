@@ -1,5 +1,8 @@
 sudo: false
 language: node_js
 node_js:
-  - 'stable'
-  - '8'
+  - 12
+  - 10
+  - 8
+  - 7
+  - 6
