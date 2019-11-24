@@ -1,19 +1,14 @@
 /*global describe, it */
 'use strict';
 
-var assert = require('yeoman-assert');
-var helper = require('./helper');
+const assert = require('yeoman-assert');
+const helper = require('./helper');
 
-function pkgContainsDevDependencies(dependency) {
-  var pkg = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
-  return pkg.devDependencies[dependency] !== undefined;
-}
-
-describe('Generator test', function () {
-  it('creates configuration files', function (done) {
+describe('Generator test', () => {
+  it('creates configuration files', (done) => {
     helper.run({}, {
       'uiAction': 'No'
-    }, function () {
+    }, () => {
       assert.file([
         '.editorconfig',
         '.bowerrc',
@@ -34,10 +29,10 @@ describe('Generator test', function () {
     });
   });
 
-  it('creates expected files with babel', function (done) {
+  it('creates expected files with babel', (done) => {
     helper.run({}, {
       'uiAction': 'No'
-    }, function () {
+    }, () => {
       assert.file([
         'app/manifest.json',
         'app/scripts.babel/background.js',
@@ -56,12 +51,12 @@ describe('Generator test', function () {
     });
   });
 
-  it('creates expected files with --no-babel', function (done) {
+  it('creates expected files with --no-babel', (done) => {
     helper.run({
       babel: false
     }, {
       'uiAction': 'No'
-    }, function () {
+    }, () => {
       assert.file([
         'app/scripts/background.js',
         'app/scripts/chromereload.js',
@@ -81,12 +76,12 @@ describe('Generator test', function () {
     });
   });
 
-  it('creates expected files with sass', function (done) {
+  it('creates expected files with sass', (done) => {
     helper.run({
       sass: true
     }, {
       'uiAction': 'browserAction'
-    }, function () {
+    }, () => {
       assert.file([
         'app/styles.scss/main.scss',
       ]);

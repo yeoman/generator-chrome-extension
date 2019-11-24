@@ -1,15 +1,14 @@
-var path = require('path');
-var helpers = require('yeoman-test');
-var assign = require('object-assign');
+const path = require('path');
+const helpers = require('yeoman-test');
 
 module.exports = {
-  run: function (options, prompts, done) {
+  run: (options, prompts, done) => {
     helpers.run(path.join(__dirname, '../app'))
-      .withOptions(assign({
+      .withOptions(Object.assign({
         'skip-install': true,
         'babel': true
       }, options))
-      .withPrompts(assign({
+      .withPrompts(Object.assign({
         'name': 'temp',
         'description': 'description',
         'uiFeatures': [],
