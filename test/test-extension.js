@@ -1,15 +1,15 @@
 /*global describe, it */
 'use strict';
 
-var assert = require('yeoman-assert');
-var helper = require('./helper');
+const assert = require('yeoman-assert');
+const helper = require('./helper');
 
-describe('Extension test', function () {
-  it('creates expected files in no UI Action', function (done) {
+describe('Extension test', () => {
+  it('creates expected files in no UI Action', (done) => {
     helper.run({}, {
       'uiAction': 'No'
-    }, function () {
-      var expected = [
+    }, () => {
+      const expected = [
         'app/bower_components',
         'app/manifest.json',
         'app/_locales/en/messages.json',
@@ -26,11 +26,11 @@ describe('Extension test', function () {
     });
   });
 
-  it('creates expected files in Browser Action', function (done) {
+  it('creates expected files in Browser Action', (done) => {
     helper.run({}, {
       'uiAction': 'browserAction'
-    }, function () {
-      var expected = [
+    }, () => {
+      const expected = [
         'app/bower_components',
         'app/scripts.babel/popup.js',
         'app/popup.html'
@@ -45,11 +45,11 @@ describe('Extension test', function () {
     });
   });
 
-  it('creates expected files in Page Action', function (done) {
+  it('creates expected files in Page Action', (done) => {
     helper.run({}, {
       'uiAction': 'pageAction'
-    }, function () {
-      var expected = [
+    }, () => {
+      const expected = [
         'app/bower_components',
         'app/scripts.babel/popup.js',
         'app/popup.html'
@@ -64,11 +64,11 @@ describe('Extension test', function () {
     });
   });
 
-  it('creates expected files with Options Page', function (done) {
+  it('creates expected files with Options Page', (done) => {
     helper.run({}, {
       'uiFeatures': ['optionsUI']
-    }, function () {
-      var expected = [
+    }, () => {
+      const expected = [
         'app/scripts.babel/options.js',
         'app/options.html'
       ];
@@ -83,10 +83,10 @@ describe('Extension test', function () {
     });
   });
 
-  it('creates manifest.json with Omnibox option', function (done) {
+  it('creates manifest.json with Omnibox option', (done) => {
     helper.run({}, {
       'uiFeatures': ['omnibox']
-    }, function () {
+    }, () => {
       assert.fileContent([
         ['app/manifest.json', /"omnibox": {\s+"keyword": "OMNIBOX-KEYWORD"\s+}/]
       ]);
@@ -94,10 +94,10 @@ describe('Extension test', function () {
     });
   });
 
-  it('creates expected files with Content-script option', function (done) {
+  it('creates expected files with Content-script option', (done) => {
     helper.run({}, {
       'uiFeatures': ['contentScripts']
-    }, function () {
+    }, () => {
       assert.fileContent([
         ['app/manifest.json', /"content_scripts": \[\s+{\s+"matches": \[\s+"http:\/\/\*\/\*",\s+"https:\/\/\*\/\*"\s+\],\s+"js": \[\s+"scripts\/contentscript.js"\s+\],\s+"run_at": "document_end",\s+"all_frames": false/],
       ]);
@@ -105,7 +105,7 @@ describe('Extension test', function () {
     });
   });
 
-  it('creates expected manifest permission properties', function (done) {
+  it('creates expected manifest permission properties', (done) => {
     helper.run({}, {
       'permissions': [
         'permission',
@@ -117,7 +117,7 @@ describe('Extension test', function () {
         'http://*/*',
         'https://*/*'
       ]
-    }, function () {
+    }, () => {
       assert.fileContent([
         ['app/manifest.json', /"permissions"/],
         ['app/manifest.json', /"tabs"/],
