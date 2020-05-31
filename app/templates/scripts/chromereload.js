@@ -24,9 +24,9 @@ connection.onmessage = e => {
     if (data && data.command === 'reload') {
       var currentTime = Date.now();
       if (lastReload && currentTime - lastReload > 60000) {
-	// don't reload more than once a minute
-	chrome.runtime.reload();
-	chrome.developerPrivate.reload(chrome.runtime.id, 
+	      // don't reload more than once a minute
+	      chrome.runtime.reload();
+	      chrome.developerPrivate.reload(chrome.runtime.id, 
 				       {failQuietly: true});
       }
     }
