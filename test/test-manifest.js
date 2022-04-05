@@ -1,34 +1,29 @@
 /*global describe, it */
 'use strict';
 
-var assert = require('yeoman-assert');
-var chromeManifest = require('../app/chrome-manifest');
-var headerize = require('headerize');
+const assert = require('yeoman-assert');
+const chromeManifest = require('../app/chrome-manifest');
+const headerize = require('headerize');
 
-function testChoices(choices) {
-  var count = 0;
-  choices.forEach(function (c) {
-    count++;
-    assert.equal(headerize(c.value), c.name);
+const testChoices = (choices) => {
+  choices.forEach((choice) => {
+    assert.equal(headerize(choice.value), choice.name);
   });
-
-  assert.equal(count, choices.length);
 }
 
-describe('Choices test', function () {
-  it('generates the permision list of chrome extension', function (done) {
+describe('Choices test', () => {
+  it('generates the permision list of chrome extension', () => {
       testChoices(chromeManifest.permissionChoices());
       testChoices(chromeManifest.permissionChoices(true));
       testChoices(chromeManifest.uiActionChoices());
       testChoices(chromeManifest.uiFeatureChoices());
 
-      done();
   });
 });
 
-describe('Manifest test', function () {
-  it('generates the permision list of chrome primary', function (done) {
-    var manifest = chromeManifest.createManifest({
+describe('Manifest test', () => {
+  it('generates the permision list of chrome primary', () => {
+    const manifest = chromeManifest.createManifest({
       fields: chromeManifest.uiActions.slice(1).concat(chromeManifest.uiFeatures),
       permissions: chromeManifest.primaryPermissions
     });
@@ -48,7 +43,5 @@ describe('Manifest test', function () {
     assert.ok(manifest.content_scripts);
     assert.ok(manifest.omnibox);
     assert.ok(manifest.web_accessible_resources);
-
-    done();
   });
 });
