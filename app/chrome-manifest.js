@@ -19,6 +19,7 @@ var chromePrimaryPermissions = [
   'notifications',
   'pageCapture',
   'tabs',
+  'tabGroups',
   'topSites',
   'storage',
   'webNavigation',
