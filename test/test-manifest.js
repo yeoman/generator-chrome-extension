@@ -41,7 +41,7 @@ describe('Manifest test', function () {
     assert.equal(manifest.default_locale, 'en');
     assert.equal(manifest.background.scripts[0], 'libs/polyfill.min.js');
     assert.equal(manifest.background.scripts[1], 'scripts/chromereload.js');
-    assert.equal(manifest.permissions.length, 21);
+    assert.equal(manifest.permissions.length, 22);
     assert.ok(manifest.browser_action);
     assert.ok(manifest.page_action);
     assert.ok(manifest.options_ui);
